@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Anfiteatro - Lydia Kitz Moreira</title>
+    <title>Agendamento de Espaços - Lydia Kitz Moreira</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary: #2c3e50;
@@ -24,7 +23,7 @@
         }
         
         header {
-            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 2rem;
             text-align: center;
@@ -32,479 +31,138 @@
         }
         
         .logo {
-            font-size: 1.8rem;
+            font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
         
-        .back-btn {
-            position: absolute;
-            left: 2rem;
-            top: 2rem;
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
+        .subtitle {
+            font-weight: 300;
+            opacity: 0.9;
         }
         
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+        .spaces-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        .booking-form {
+        .space-card {
             background: white;
             border-radius: 12px;
-            padding: 2rem;
+            overflow: hidden;
             box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-        }
-        
-        .form-title {
-            color: #8e44ad;
-            margin-top: 0;
-            border-bottom: 2px solid #f1f1f1;
-            padding-bottom: 1rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            transition: border 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: #9b59b6;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
-        }
-        
-        .btn-submit {
-            background: #8e44ad;
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
+        }
+        
+        .space-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        
+        .space-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .space-info {
+            padding: 1.5rem;
+        }
+        
+        .space-title {
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+            color: var(--primary);
+        }
+        
+        .space-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .btn-book {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
             transition: background 0.3s ease;
         }
         
-        .btn-submit:hover {
-            background: #7d3c98;
+        .btn-book:hover {
+            background: #2980b9;
         }
         
-        .calendar {
-            margin-top: 2rem;
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .calendar-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #8e44ad;
-        }
-        
-        .calendar-nav {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .calendar-nav-btn {
-            background: #f1f1f1;
-            border: none;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-        }
-        
-        .calendar-day-header {
-            text-align: center;
-            font-weight: 600;
-            padding: 0.5rem;
-            color: #555;
-        }
-        
-        .calendar-day {
-            background: white;
-            border: 1px solid #eee;
-            padding: 0.8rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-radius: 8px;
-        }
-        
-        .calendar-day:hover {
-            background: #f8f8f8;
-        }
-        
-        .calendar-day.disabled {
-            color: #ccc;
-            background: #f9f9f9;
-            cursor: not-allowed;
-        }
-        
-        .calendar-day.selected {
-            background: #8e44ad;
+        footer {
+            background: var(--dark);
             color: white;
-        }
-        
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .time-slot {
-            background: white;
-            border: 1px solid #ddd;
-            padding: 1rem;
             text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .time-slot:hover {
-            border-color: #9b59b6;
-        }
-        
-        .time-slot.booked {
-            background: #f1f1f1;
-            color: #999;
-            cursor: not-allowed;
-            position: relative;
-        }
-        
-        .time-slot.booked::after {
-            content: "Reservado";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-        
-        .time-slot.selected {
-            background: #8e44ad;
-            color: white;
-            border-color: #8e44ad;
-        }
-        
-        .confirmation {
-            display: none;
-            background: #f8f9fa;
-            border-left: 4px solid #8e44ad;
             padding: 1.5rem;
             margin-top: 2rem;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .confirmation.show {
-            display: block;
         }
         
         @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-            
-            .back-btn {
-                left: 1rem;
-                top: 1.5rem;
-            }
-            
-            .calendar-grid {
-                gap: 0.3rem;
-            }
-            
-            .calendar-day {
-                padding: 0.5rem 0.3rem;
-                font-size: 0.9rem;
-            }
-            
-            .time-slots {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            .spaces-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
-        <div class="logo">Agendar Anfiteatro</div>
+        <div class="logo">Agendamento de Espaços</div>
+        <div class="subtitle">Escola Lydia Kitz Moreira - Guarulhos Norte</div>
     </header>
     
-    <div class="container">
-        <div class="booking-form">
-            <h2 class="form-title">Preencha os dados do agendamento</h2>
-            
-            <form id="bookingForm">
-                <div class="form-group">
-                    <label for="professor">Professor</label>
-                    <select id="professor" class="form-control" required>
-                        <option value="">Selecione um professor</option>
-                        <!-- Professores serão carregados dinamicamente do CSV -->
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">E-mail Institucional</label>
-                    <input type="email" id="email" class="form-control" required readonly>
-                </div>
-                
-                <div class="form-group">
-                    <label for="turma">Turma</label>
-                    <select id="turma" class="form-control" required>
-                        <option value="">Selecione uma turma</option>
-                        <optgroup label="Manhã">
-                            <option value="6°A">6°A</option>
-                            <option value="6°B">6°B</option>
-                            <option value="6°C">6°C</option>
-                            <option value="6°D">6°D</option>
-                            <option value="2°A">2°A</option>
-                            <option value="2°B">2°B</option>
-                            <option value="2°C">2°C</option>
-                            <option value="2°D">2°D</option>
-                            <option value="2°E">2°E</option>
-                        </optgroup>
-                        <optgroup label="Tarde">
-                            <option value="6°E">6°E</option>
-                            <option value="6°F">6°F</option>
-                            <option value="7°A">7°A</option>
-                            <option value="7°B">7°B</option>
-                            <option value="7°C">7°C</option>
-                            <option value="7°D">7°D</option>
-                            <option value="7°E">7°E</option>
-                            <option value="7°F">7°F</option>
-                            <option value="1°G">1°G</option>
-                        </optgroup>
-                        <optgroup label="Noite">
-                            <option value="2°F">2°F</option>
-                            <option value="2°G">2°G</option>
-                            <option value="2°H">2°H</option>
-                            <option value="2°I">2°I</option>
-                            <option value="3°D">3°D</option>
-                            <option value="3°E">3°E</option>
-                            <option value="3°F">3°F</option>
-                            <option value="3°G">3°G</option>
-                        </optgroup>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="atividade">Atividade</label>
-                    <input type="text" id="atividade" class="form-control" required placeholder="Descreva a atividade que será realizada">
-                </div>
-                
-                <div class="calendar">
-                    <div class="calendar-header">
-                        <div class="calendar-title">Maio 2025</div>
-                        <div class="calendar-nav">
-                            <button type="button" class="calendar-nav-btn"><i class="fas fa-chevron-left"></i></button>
-                            <button type="button" class="calendar-nav-btn"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="calendar-grid">
-                        <div class="calendar-day-header">Dom</div>
-                        <div class="calendar-day-header">Seg</div>
-                        <div class="calendar-day-header">Ter</div>
-                        <div class="calendar-day-header">Qua</div>
-                        <div class="calendar-day-header">Qui</div>
-                        <div class="calendar-day-header">Sex</div>
-                        <div class="calendar-day-header">Sáb</div>
-                        
-                        <!-- Dias do calendário serão gerados dinamicamente via JavaScript -->
-                    </div>
-                </div>
-                
-                <div class="time-slots">
-                    <div class="time-slot" data-time="07:00-08:00">07:00 - 08:00</div>
-                    <div class="time-slot" data-time="08:00-09:00">08:00 - 09:00</div>
-                    <div class="time-slot" data-time="09:00-10:00">09:00 - 10:00</div>
-                    <div class="time-slot" data-time="10:00-11:00">10:00 - 11:00</div>
-                    <div class="time-slot" data-time="11:00-12:00">11:00 - 12:00</div>
-                    <div class="time-slot" data-time="13:00-14:00">13:00 - 14:00</div>
-                    <div class="time-slot" data-time="14:00-15:00">14:00 - 15:00</div>
-                    <div class="time-slot" data-time="15:00-16:00">15:00 - 16:00</div>
-                    <div class="time-slot" data-time="16:00-17:00">16:00 - 17:00</div>
-                    <div class="time-slot" data-time="19:00-20:00">19:00 - 20:00</div>
-                    <div class="time-slot" data-time="20:00-21:00">20:00 - 21:00</div>
-                    <!-- Horários podem ser ajustados conforme necessidade -->
-                </div>
-                
-                <div class="form-group">
-                    <label for="observacoes">Observações</label>
-                    <textarea id="observacoes" class="form-control" rows="3" placeholder="Alguma observação importante?"></textarea>
-                </div>
-                
-                <button type="submit" class="btn-submit">Solicitar Agendamento</button>
-            </form>
-            
-            <div id="confirmation" class="confirmation">
-                <h3>Agendamento Solicitado com Sucesso!</h3>
-                <p id="confirmationDetails"></p>
-                <p>Você receberá uma confirmação por e-mail em breve.</p>
+    <div class="spaces-container">
+        <div class="space-card" onclick="location.href='anfiteatro.html'">
+            <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1567443024551-f3e3a7b9d41f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="space-info">
+                <h2 class="space-title">Anfiteatro</h2>
+                <p class="space-description">Espaço para apresentações, palestras e eventos escolares. Capacidade para 120 pessoas.</p>
+                <a href="anfiteatro.html" class="btn-book">Agendar</a>
+            </div>
+        </div>
+        
+        <div class="space-card" onclick="location.href='laboratorio.html'">
+            <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1581093450021-4a7360e9a7e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="space-info">
+                <h2 class="space-title">Laboratório</h2>
+                <p class="space-description">Equipado para aulas práticas de ciências, com bancadas e materiais para experimentos.</p>
+                <a href="laboratorio.html" class="btn-book">Agendar</a>
+            </div>
+        </div>
+        
+        <div class="space-card" onclick="location.href='informatica.html'">
+            <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="space-info">
+                <h2 class="space-title">Sala de Informática</h2>
+                <p class="space-description">Computadores modernos para aulas de tecnologia e pesquisas escolares.</p>
+                <a href="informatica.html" class="btn-book">Agendar</a>
+            </div>
+        </div>
+        
+        <div class="space-card" onclick="location.href='leitura.html'">
+            <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="space-info">
+                <h2 class="space-title">Sala de Leitura</h2>
+                <p class="space-description">Ambiente tranquilo para estudo e pesquisa, com acervo diversificado.</p>
+                <a href="leitura.html" class="btn-book">Agendar</a>
             </div>
         </div>
     </div>
     
-    <script>
-        // Carregar lista de professores do CSV
-        const professores = [
-            {nome: "ADEMAR RIBEIRO DE SOUZA", email: "ademarribeirosouza@prof.educacao.sp.gov.br"},
-            {nome: "ALEX LUTH PEREIRA MARANHAO", email: "luth@prof.educacao.sp.gov.br"},
-            // ... adicionar todos os outros professores da lista
-        ];
-        
-        // Preencher dropdown de professores
-        const professorSelect = document.getElementById('professor');
-        const emailInput = document.getElementById('email');
-        
-        professores.forEach(prof => {
-            const option = document.createElement('option');
-            option.value = prof.nome;
-            option.textContent = prof.nome;
-            professorSelect.appendChild(option);
-        });
-        
-        // Atualizar e-mail quando professor for selecionado
-        professorSelect.addEventListener('change', function() {
-            const selectedProfessor = this.value;
-            const professor = professores.find(p => p.nome === selectedProfessor);
-            if (professor) {
-                emailInput.value = professor.email;
-            } else {
-                emailInput.value = '';
-            }
-        });
-        
-        // Simular reservas existentes (em um sistema real, isso viria de um banco de dados)
-        const reservasExistentes = [
-            {data: '2025-05-21', horario: '10:00-11:00', espaco: 'anfiteatro'},
-            {data: '2025-05-22', horario: '14:00-15:00', espaco: 'anfiteatro'},
-        ];
-        
-        // Gerar calendário
-        function generateCalendar(year, month) {
-            // Implementação do calendário
-            // Marcar dias com reservas existentes
-        }
-        
-        // Selecionar data e horário
-        let selectedDate = null;
-        let selectedTime = null;
-        
-        document.querySelectorAll('.calendar-day:not(.disabled)').forEach(day => {
-            day.addEventListener('click', function() {
-                document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedDate = this.getAttribute('data-date');
-                updateTimeSlots();
-            });
-        });
-        
-        document.querySelectorAll('.time-slot:not(.booked)').forEach(slot => {
-            slot.addEventListener('click', function() {
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedTime = this.getAttribute('data-time');
-            });
-        });
-        
-        function updateTimeSlots() {
-            if (!selectedDate) return;
-            
-            document.querySelectorAll('.time-slot').forEach(slot => {
-                const time = slot.getAttribute('data-time');
-                const isBooked = reservasExistentes.some(r => 
-                    r.data === selectedDate && r.horario === time && r.espaco === 'anfiteatro');
-                
-                if (isBooked) {
-                    slot.classList.add('booked');
-                    slot.classList.remove('selected');
-                } else {
-                    slot.classList.remove('booked');
-                }
-            });
-        }
-        
-        // Enviar formulário
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!selectedDate || !selectedTime) {
-                alert('Por favor, selecione uma data e horário');
-                return;
-            }
-            
-            const formData = {
-                professor: professorSelect.value,
-                email: emailInput.value,
-                turma: document.getElementById('turma').value,
-                atividade: document.getElementById('atividade').value,
-                data: selectedDate,
-                horario: selectedTime,
-                observacoes: document.getElementById('observacoes').value
-            };
-            
-            // Aqui você enviaria os dados para o servidor
-            console.log('Dados do agendamento:', formData);
-            
-            // Mostrar confirmação
-            document.getElementById('confirmationDetails').innerHTML = `
-                <strong>Professor:</strong> ${formData.professor}<br>
-                <strong>Turma:</strong> ${formData.turma}<br>
-                <strong>Data:</strong> ${formData.data}<br>
-                <strong>Horário:</strong> ${formData.horario}<br>
-                <strong>Atividade:</strong> ${formData.atividade}
-            `;
-            
-            document.getElementById('confirmation').classList.add('show');
-            document.getElementById('bookingForm').reset();
-            window.scrollTo(0, document.body.scrollHeight);
-        });
-        
-        // Inicializar calendário para maio 2025
-        generateCalendar(2025, 4);
-    </script>
+    <footer>
+        <p>Sistema de Agendamento de Espaços © 2025 - Escola Lydia Kitz Moreira</p>
+    </footer>
 </body>
 </html>
