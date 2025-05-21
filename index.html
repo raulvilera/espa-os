@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento de Espaços - Lydia Kitz Moreira</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary: #2c3e50;
@@ -12,6 +13,10 @@
             --accent: #e74c3c;
             --light: #ecf0f1;
             --dark: #2c3e50;
+            --anfiteatro: linear-gradient(135deg, #1e88e5, #0d47a1);
+            --laboratorio: linear-gradient(135deg, #ffc107, #ff9800);
+            --informatica: linear-gradient(135deg, #4caf50, #2e7d32);
+            --leitura: linear-gradient(135deg, #9c27b0, #6a1b9a);
         }
         
         body {
@@ -25,13 +30,13 @@
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
         .logo {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
@@ -39,62 +44,74 @@
         .subtitle {
             font-weight: 300;
             opacity: 0.9;
+            font-size: 0.9rem;
         }
         
         .spaces-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem; /* Reduzi o gap entre os cards */
+            padding: 1.5rem;
             max-width: 1200px;
             margin: 0 auto;
         }
         
         .space-card {
+            flex: 1;
+            min-width: 220px; /* Reduzi a largura mínima */
+            max-width: 240px; /* Reduzi a largura máxima */
             background: white;
-            border-radius: 12px;
+            border-radius: 10px; /* Reduzi o border-radius */
             overflow: hidden;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Reduzi a sombra */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
         
         .space-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            transform: translateY(-3px); /* Reduzi o efeito de hover */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
         
         .space-image {
-            height: 180px;
+            height: 120px; /* Reduzi a altura da imagem */
             background-size: cover;
             background-position: center;
         }
         
         .space-info {
-            padding: 1.5rem;
+            padding: 1rem; /* Reduzi o padding */
         }
         
         .space-title {
-            font-size: 1.5rem;
+            font-size: 1.1rem; /* Reduzi o tamanho da fonte */
             margin: 0 0 0.5rem 0;
             color: var(--primary);
+            text-align: center;
         }
         
         .space-description {
             color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-size: 0.8rem; /* Reduzi a fonte */
+            text-align: center;
         }
         
         .btn-book {
-            display: inline-block;
+            display: block;
             background: var(--secondary);
             color: white;
-            padding: 0.8rem 1.5rem;
+            padding: 0.6rem 1rem; /* Reduzi o padding */
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             transition: background 0.3s ease;
+            text-align: center;
+            margin: 0 auto;
+            width: fit-content;
+            font-size: 0.8rem; /* Reduzi a fonte */
         }
         
         .btn-book:hover {
@@ -107,12 +124,285 @@
             text-align: center;
             padding: 1.5rem;
             margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal Styles - Compacto e Centralizado */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 1rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 320px; /* Diminuí ainda mais o tamanho máximo do modal */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            max-height: 90vh; /* Limita a altura máxima */
+            overflow-y: auto; /* Adiciona scroll se necessário */
+        }
+        
+        .modal-header {
+            padding: 0.6rem;
+            border-radius: 6px 6px 0 0;
+            margin: -1rem -1rem 0.6rem -1rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .anfiteatro-header {
+            background: var(--anfiteatro);
+        }
+        
+        .laboratorio-header {
+            background: var(--laboratorio);
+        }
+        
+        .informatica-header {
+            background: var(--informatica);
+        }
+        
+        .leitura-header {
+            background: var(--leitura);
+        }
+        
+        .modal-title {
+            margin: 0;
+            font-size: 1rem; /* Diminuí um pouco a fonte */
+            font-weight: 600;
+            padding: 0 1.5rem; /* Reduzi o padding */
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 0.8rem;
+            top: 0.6rem;
+            font-size: 1rem;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 0.6rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75rem;
+            box-sizing: border-box;
+        }
+        
+        /* Ajustei os campos específicos para não extrapolarem */
+        #professorName, #professorEmail {
+            width: calc(100% - 1rem);
+            max-width: 100%;
+        }
+        
+        .calendar {
+            margin: 0.6rem 0;
+        }
+        
+        .calendar-header {
+            margin-bottom: 0.6rem;
+        }
+        
+        .calendar-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .week-days {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.2rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .week-day {
+            text-align: center;
+            font-weight: 600;
+            padding: 0.2rem;
+            font-size: 0.6rem;
+        }
+        
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.2rem;
+        }
+        
+        .calendar-day {
+            padding: 0.4rem;
+            text-align: center;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.7rem;
+        }
+        
+        .calendar-day:hover {
+            background-color: #f0f8ff;
+        }
+        
+        .calendar-day.selected {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .calendar-day.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            background-color: #f9f9f9;
+        }
+        
+        .period-selector {
+            margin: 0.6rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 0.2rem;
+        }
+        
+        .period-btn {
+            padding: 0.4rem 0.6rem;
+            background-color: #f1f1f1;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.65rem;
+        }
+        
+        .period-btn.active {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .classes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.2rem;
+            max-height: 150px; /* Reduzi a altura máxima */
+            overflow-y: auto;
+            padding: 0.2rem;
+        }
+        
+        .class-slot {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.7rem;
+        }
+        
+        .class-slot:hover {
+            border-color: var(--secondary);
+        }
+        
+        .class-slot.selected {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+            position: relative;
+        }
+        
+        .class-slot.selected::after {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 6px;
+            font-size: 0.7rem;
+        }
+        
+        .class-slot.booked {
+            background-color: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .class-slot.booked::after {
+            content: "Reservado";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.5rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.6rem;
+        }
+        
+        .btn-confirm {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.7rem;
         }
         
         @media (max-width: 768px) {
             .spaces-container {
-                grid-template-columns: 1fr;
-                padding: 1rem;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .space-card {
+                min-width: 100%;
+                max-width: 280px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                max-width: 300px;
+                padding: 0.8rem;
+            }
+            
+            .week-days, .calendar-days {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .calendar-day {
+                padding: 0.3rem;
             }
         }
     </style>
@@ -124,39 +414,128 @@
     </header>
     
     <div class="spaces-container">
-        <div class="space-card" onclick="location.href='anfiteatro.html'">
+        <div class="space-card" onclick="openModal('anfiteatro')">
             <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1567443024551-f3e3a7b9d41f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
             <div class="space-info">
                 <h2 class="space-title">Anfiteatro</h2>
-                <p class="space-description">Espaço para apresentações, palestras e eventos escolares. Capacidade para 120 pessoas.</p>
-                <a href="anfiteatro.html" class="btn-book">Agendar</a>
+                <p class="space-description">Espaço para apresentações, palestras e eventos escolares.</p>
+                <a href="#" class="btn-book">Agendar</a>
             </div>
         </div>
         
-        <div class="space-card" onclick="location.href='laboratorio.html'">
+        <div class="space-card" onclick="openModal('laboratorio')">
             <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1581093450021-4a7360e9a7e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
             <div class="space-info">
                 <h2 class="space-title">Laboratório</h2>
-                <p class="space-description">Equipado para aulas práticas de ciências, com bancadas e materiais para experimentos.</p>
-                <a href="laboratorio.html" class="btn-book">Agendar</a>
+                <p class="space-description">Equipado para aulas práticas de ciências.</p>
+                <a href="#" class="btn-book">Agendar</a>
             </div>
         </div>
         
-        <div class="space-card" onclick="location.href='informatica.html'">
+        <div class="space-card" onclick="openModal('informatica')">
             <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
             <div class="space-info">
                 <h2 class="space-title">Sala de Informática</h2>
-                <p class="space-description">Computadores modernos para aulas de tecnologia e pesquisas escolares.</p>
-                <a href="informatica.html" class="btn-book">Agendar</a>
+                <p class="space-description">Computadores modernos para aulas de tecnologia.</p>
+                <a href="#" class="btn-book">Agendar</a>
             </div>
         </div>
         
-        <div class="space-card" onclick="location.href='leitura.html'">
+        <div class="space-card" onclick="openModal('leitura')">
             <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
             <div class="space-info">
                 <h2 class="space-title">Sala de Leitura</h2>
-                <p class="space-description">Ambiente tranquilo para estudo e pesquisa, com acervo diversificado.</p>
-                <a href="leitura.html" class="btn-book">Agendar</a>
+                <p class="space-description">Ambiente tranquilo para estudo e pesquisa.</p>
+                <a href="#" class="btn-book">Agendar</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Agendamento Compacto -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <h2 class="modal-title" id="modalSpaceTitle">Agendar Anfiteatro</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="professorName">Nome do Professor</label>
+                <input type="text" id="professorName" placeholder="Nome completo">
+            </div>
+            
+            <div class="form-group">
+                <label for="professorEmail">E-mail Institucional</label>
+                <input type="email" id="professorEmail" placeholder="exemplo@prof.educacao.sp.gov.br">
+            </div>
+            
+            <div class="form-group">
+                <label for="classGrade">Série/Turma</label>
+                <select id="classGrade">
+                    <option value="">Selecione uma turma</option>
+                    <optgroup label="Manhã">
+                        <option value="6°A">6°A</option>
+                        <option value="6°B">6°B</option>
+                        <option value="6°C">6°C</option>
+                        <option value="6°D">6°D</option>
+                        <option value="2°A">2°A</option>
+                        <option value="2°B">2°B</option>
+                        <option value="2°C">2°C</option>
+                        <option value="2°D">2°D</option>
+                        <option value="2°E">2°E</option>
+                    </optgroup>
+                    <optgroup label="Tarde">
+                        <option value="6°E">6°E</option>
+                        <option value="6°F">6°F</option>
+                        <option value="7°A">7°A</option>
+                        <option value="7°B">7°B</option>
+                        <option value="7°C">7°C</option>
+                        <option value="7°D">7°D</option>
+                        <option value="7°E">7°E</option>
+                        <option value="7°F">7°F</option>
+                        <option value="1°G">1°G</option>
+                    </optgroup>
+                    <optgroup label="Noite">
+                        <option value="2°F">2°F</option>
+                        <option value="2°G">2°G</option>
+                        <option value="2°H">2°H</option>
+                        <option value="2°I">2°I</option>
+                        <option value="3°D">3°D</option>
+                        <option value="3°E">3°E</option>
+                        <option value="3°F">3°F</option>
+                        <option value="3°G">3°G</option>
+                    </optgroup>
+                </select>
+            </div>
+            
+            <div class="calendar">
+                <h3 class="calendar-title" id="currentMonth">Maio 2025</h3>
+                
+                <div class="week-days">
+                    <div class="week-day">Seg</div>
+                    <div class="week-day">Ter</div>
+                    <div class="week-day">Qua</div>
+                    <div class="week-day">Qui</div>
+                    <div class="week-day">Sex</div>
+                </div>
+                
+                <div class="calendar-days" id="calendarDays">
+                    <!-- Dias serão preenchidos via JavaScript -->
+                </div>
+            </div>
+            
+            <div class="period-selector">
+                <button class="period-btn active" data-period="manha">Manhã</button>
+                <button class="period-btn" data-period="tarde">Tarde</button>
+                <button class="period-btn" data-period="noite">Noite</button>
+            </div>
+            
+            <div class="classes-grid" id="classesGrid">
+                <!-- Aulas serão preenchidas via JavaScript -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-confirm" onclick="confirmBooking()">Confirmar Agendamento</button>
             </div>
         </div>
     </div>
@@ -164,5 +543,388 @@
     <footer>
         <p>Sistema de Agendamento de Espaços © 2025 - Escola Lydia Kitz Moreira</p>
     </footer>
+    
+    <script>
+        // Variáveis globais
+        let currentSpace = '';
+        let selectedDate = '';
+        let selectedPeriod = 'manha';
+        let selectedClass = '';
+        
+        // Abrir modal de agendamento
+        function openModal(space) {
+            currentSpace = space;
+            const modal = document.getElementById('bookingModal');
+            const title = document.getElementById('modalSpaceTitle');
+            const header = document.getElementById('modalHeader');
+            
+            // Resetar classes de cor do header
+            header.className = 'modal-header';
+            
+            // Definir título e cor do modal conforme o espaço
+            if (space === 'anfiteatro') {
+                title.textContent = 'Agendar Anfiteatro';
+                header.classList.add('anfiteatro-header');
+            } else if (space === 'laboratorio') {
+                title.textContent = 'Agendar Laboratório';
+                header.classList.add('laboratorio-header');
+            } else if (space === 'informatica') {
+                title.textContent = 'Agendar Sala de Informática';
+                header.classList.add('informatica-header');
+            } else if (space === 'leitura') {
+                title.textContent = 'Agendar Sala de Leitura';
+                header.classList.add('leitura-header');
+            }
+            
+            // Gerar calendário
+            generateCalendar();
+            
+            // Mostrar modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Impede rolagem da página
+        }
+        
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restaura rolagem
+            resetForm();
+        }
+        
+        // Resetar formulário
+        function resetForm() {
+            document.getElementById('professorName').value = '';
+            document.getElementById('professorEmail').value = '';
+            document.getElementById('classGrade').value = '';
+            selectedDate = '';
+            selectedClass = '';
+            
+            // Resetar seleções
+            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('.class-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Resetar período para manhã
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.period-btn[data-period="manha"]').classList.add('active');
+            selectedPeriod = 'manha';
+            
+            // Limpar grid de aulas
+            document.getElementById('classesGrid').innerHTML = '';
+        }
+        
+        // Gerar calendário com dias úteis (segunda a sexta)
+        function generateCalendar() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            const daysContainer = document.getElementById('calendarDays');
+            
+            // Atualizar título do mês
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junio", 
+                              "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            // Limpar dias existentes
+            daysContainer.innerHTML = '';
+            
+            // Obter primeiro dia do mês
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            
+            // Obter último dia do mês
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            
+            // Obter dia da semana do primeiro dia (0=Domingo, 1=Segunda, etc.)
+            let firstDayOfWeek = firstDay.getDay();
+            
+            // Ajustar para começar na segunda-feira (se primeiro dia for domingo, começa na coluna 6)
+            if (firstDayOfWeek === 0) firstDayOfWeek = 6;
+            else firstDayOfWeek -= 1;
+            
+            // Adicionar dias vazios para alinhar o primeiro dia
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.classList.add('calendar-day', 'disabled');
+                daysContainer.appendChild(emptyDay);
+            }
+            
+            // Adicionar dias do mês
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const dayOfWeek = date.getDay();
+                
+                // Só mostrar dias úteis (segunda a sexta)
+                if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('calendar-day');
+                    dayElement.textContent = day;
+                    
+                    // Formatar data como YYYY-MM-DD
+                    const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    dayElement.dataset.date = formattedDate;
+                    
+                    // Verificar se é um dia passado
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (date < today) {
+                        dayElement.classList.add('disabled');
+                    } else {
+                        // Adicionar evento de clique
+                        dayElement.addEventListener('click', function() {
+                            selectDate(this);
+                        });
+                    }
+                    
+                    daysContainer.appendChild(dayElement);
+                }
+            }
+        }
+        
+        // Selecionar data
+        function selectDate(element) {
+            // Desmarcar qualquer data selecionada anteriormente
+            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Marcar nova seleção
+            element.classList.add('selected');
+            selectedDate = element.dataset.date;
+            
+            // Se já tiver turma selecionada, carregar aulas
+            if (document.getElementById('classGrade').value) {
+                loadClasses();
+            }
+        }
+        
+        // Carregar aulas conforme período selecionado
+        function loadClasses() {
+            const classGrade = document.getElementById('classGrade').value;
+            if (!classGrade || !selectedDate) return;
+            
+            const classesGrid = document.getElementById('classesGrid');
+            classesGrid.innerHTML = '';
+            
+            let classes = [];
+            
+            // Definir aulas conforme período
+            if (selectedPeriod === 'manha') {
+                classes = ['1ª Aula (07:00-08:00)', '2ª Aula (08:00-09:00)', '3ª Aula (09:00-10:00)', 
+                          '4ª Aula (10:00-11:00)', '5ª Aula (11:00-12:00)', '6ª Aula (12:00-13:00)'];
+            } else if (selectedPeriod === 'tarde') {
+                classes = ['1ª Aula (13:00-14:00)', '2ª Aula (14:00-15:00)', '3ª Aula (15:00-16:00)', 
+                          '4ª Aula (16:00-17:00)', '5ª Aula (17:00-18:00)', '6ª Aula (18:00-19:00)'];
+            } else if (selectedPeriod === 'noite') {
+                classes = ['1ª Aula (19:00-20:00)', '2ª Aula (20:00-21:00)', '3ª Aula (21:00-22:00)', 
+                          '4ª Aula (22:00-23:00)', '5ª Aula (23:00-00:00)'];
+            }
+            
+            // Criar elementos das aulas
+            classes.forEach((classTime, index) => {
+                const classElement = document.createElement('div');
+                classElement.classList.add('class-slot');
+                classElement.textContent = classTime;
+                classElement.dataset.class = index + 1; // 1-6 para manhã/tarde, 1-5 para noite
+                
+                // Verificar se já está reservado (simulação - em produção viria da planilha)
+                const isBooked = checkIfBooked(selectedDate, selectedPeriod, index + 1, currentSpace);
+                
+                if (isBooked) {
+                    classElement.classList.add('booked');
+                    classElement.title = `Reservado por ${isBooked.professor} para ${isBooked.classGrade}`;
+                } else {
+                    classElement.addEventListener('click', function() {
+                        selectClass(this);
+                    });
+                }
+                
+                classesGrid.appendChild(classElement);
+            });
+        }
+        
+        // Verificar se aula já está reservada (simulação)
+        function checkIfBooked(date, period, classNumber, space) {
+            // Em produção, isso seria uma chamada à API para verificar na planilha
+            // Aqui é apenas uma simulação para demonstração
+            
+            // Algumas reservas fictícias para demonstração
+            const fakeBookings = [
+                {
+                    date: new Date().toISOString().split('T')[0], // Data atual
+                    period: 'manha',
+                    classNumber: 1,
+                    space: 'anfiteatro',
+                    professor: 'Alexandre Silva Lima',
+                    classGrade: '6°A'
+                },
+                {
+                    date: new Date().toISOString().split('T')[0], // Data atual
+                    period: 'tarde',
+                    classNumber: 3,
+                    space: 'laboratorio',
+                    professor: 'Ana Paula dos Santos',
+                    classGrade: '7°B'
+                }
+            ];
+            
+            return fakeBookings.find(booking => 
+                booking.date === date && 
+                booking.period === period && 
+                booking.classNumber === classNumber && 
+                booking.space === space
+            );
+        }
+        
+        // Selecionar aula
+        function selectClass(element) {
+            // Desmarcar qualquer aula selecionada anteriormente
+            document.querySelectorAll('.class-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Marcar nova seleção
+            element.classList.add('selected');
+            selectedClass = element.dataset.class;
+        }
+        
+        // Mudar período (manhã, tarde, noite)
+        function changePeriod(period) {
+            selectedPeriod = period;
+            
+            // Atualizar botões ativos
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.period-btn[data-period="${period}"]`).classList.add('active');
+            
+            // Se já tiver data e turma selecionadas, carregar aulas
+            if (selectedDate && document.getElementById('classGrade').value) {
+                loadClasses();
+            }
+        }
+        
+        // Determinar período com base na turma selecionada
+        function determinePeriodByClass(classGrade) {
+            // Turmas da manhã
+            const morningClasses = ['6°A', '6°B', '6°C', '6°D', '2°A', '2°B', '2°C', '2°D', '2°E'];
+            
+            // Turmas da tarde
+            const afternoonClasses = ['6°E', '6°F', '7°A', '7°B', '7°C', '7°D', '7°E', '7°F', '1°G'];
+            
+            // Turmas da noite
+            const nightClasses = ['2°F', '2°G', '2°H', '2°I', '3°D', '3°E', '3°F', '3°G'];
+            
+            if (morningClasses.includes(classGrade)) {
+                return 'manha';
+            } else if (afternoonClasses.includes(classGrade)) {
+                return 'tarde';
+            } else if (nightClasses.includes(classGrade)) {
+                return 'noite';
+            }
+            
+            return 'manha'; // padrão
+        }
+        
+        // Confirmar agendamento
+        function confirmBooking() {
+            const professorName = document.getElementById('professorName').value.trim();
+            const professorEmail = document.getElementById('professorEmail').value.trim();
+            const classGrade = document.getElementById('classGrade').value;
+            
+            // Validar campos
+            if (!professorName || !professorEmail || !classGrade || !selectedDate || !selectedClass) {
+                alert('Por favor, preencha todos os campos e selecione uma data e aula.');
+                return;
+            }
+            
+            // Validar e-mail institucional
+            if (!professorEmail.endsWith('@prof.educacao.sp.gov.br')) {
+                alert('Por favor, utilize seu e-mail institucional (@prof.educacao.sp.gov.br)');
+                return;
+            }
+            
+            // Criar objeto com dados do agendamento
+            const bookingData = {
+                space: currentSpace,
+                date: selectedDate,
+                period: selectedPeriod,
+                classNumber: selectedClass,
+                professorName: professorName,
+                professorEmail: professorEmail,
+                classGrade: classGrade,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Enviar para a planilha Google (simulação)
+            sendToGoogleSheets(bookingData);
+            
+            // Fechar modal e resetar formulário
+            closeModal();
+            
+            // Mostrar mensagem de sucesso
+            alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
+        }
+        
+        // Enviar dados para a planilha Google (simulação)
+        function sendToGoogleSheets(bookingData) {
+            console.log('Dados enviados para a planilha:', bookingData);
+            
+            // Em produção, isso seria uma chamada à API do Google Sheets
+            // Exemplo de como seria (requer configuração do backend):
+            /*
+            fetch('https://seuservidor.com/api/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bookingData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Sucesso:', data);
+            })
+            .catch((error) => {
+                console.error('Erro:', error);
+            });
+            */
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Eventos dos botões de período
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    changePeriod(this.dataset.period);
+                });
+            });
+            
+            // Evento de mudança na seleção de turma
+            document.getElementById('classGrade').addEventListener('change', function() {
+                if (this.value) {
+                    // Determinar período com base na turma selecionada
+                    const period = determinePeriodByClass(this.value);
+                    changePeriod(period);
+                    
+                    if (selectedDate) {
+                        loadClasses();
+                    }
+                }
+            });
+        });
+        
+        // Fechar modal ao clicar fora dele
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
 </body>
 </html>
