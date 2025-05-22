@@ -920,70 +920,91 @@
             return 'manha'; // padrão
         }
         
-        // Confirmar agendamento
-        function confirmBooking() {
-            const professorName = document.getElementById('professorName').value.trim();
-            const professorEmail = document.getElementById('professorEmail').value.trim();
-            const classGrade = document.getElementById('classGrade').value;
-            
-            // Validar campos
-            if (!professorName || !professorEmail || !classGrade || !selectedDate || !selectedClass) {
-                alert('Por favor, preencha todos os campos e selecione uma data e aula.');
-                return;
-            }
-            
-            // Validar e-mail institucional
-            if (!professorEmail.endsWith('@prof.educacao.sp.gov.br')) {
-                alert('Por favor, utilize seu e-mail institucional (@prof.educacao.sp.gov.br)');
-                return;
-            }
-            
-            // Criar objeto com dados do agendamento
-            const bookingData = {
-                space: currentSpace,
-                date: selectedDate,
-                period: selectedPeriod,
-                classNumber: selectedClass,
-                professorName: professorName,
-                professorEmail: professorEmail,
-                classGrade: classGrade,
-                timestamp: new Date().toISOString()
-            };
-            
-            // Enviar para a planilha Google (simulação)
-            sendToGoogleSheets(bookingData);
-            
-            // Fechar modal e resetar formulário
-            closeModal();
-            
-            // Mostrar mensagem de sucesso
-            alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
-        }
+// Confirmar agendamento
+async function confirmBooking() {
+  const professorName = document.getElementById('professorName').value.trim();
+  const professorEmail = document.getElementById('professorEmail').value.trim();
+  const classGrade = document.getElementById('classGrade').value;
+  
+  // Validar campos
+  if (!professorName || !professorEmail || !classGrade || !selectedDate || !selectedClass) {
+    alert('Por favor, preencha todos os campos e selecione uma data e aula.');
+    return;
+  }
+  
+  // Validar e-mail institucional
+  if (!professorEmail.endsWith('@prof.educacao.sp.gov.br')) {
+    alert('Por favor, utilize seu e-mail institucional (@prof.educacao.sp.gov.br)');
+    return;
+  }
+  
+  // Criar objeto com dados do agendamento
+  const bookingData = {
+    space: currentSpace,
+    date: selectedDate,
+    period: selectedPeriod,
+    classNumber: selectedClass,
+    professorName: professorName,
+    professorEmail: professorEmail,
+    classGrade: classGrade,
+    timestamp: new Date().toISOString()
+  };
+  
+  try {
+    // Mostrar loading
+    const confirmBtn = document.querySelector('.btn-confirm');
+    confirmBtn.disabled = true;
+    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    
+    // Enviar para o Google Sheets
+    await sendToGoogleSheets(bookingData);
+    
+    // Fechar modal e resetar formulário
+    closeModal();
+    
+    // Mostrar mensagem de sucesso
+    alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
+    
+  } catch (error) {
+    alert('Erro ao salvar agendamento: ' + error.message);
+    console.error(error);
+    
+    // Restaurar botão
+    const confirmBtn = document.querySelector('.btn-confirm');
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Confirmar Agendamento';
+  }
+}
         
         // Enviar dados para a planilha Google (simulação)
-        function sendToGoogleSheets(bookingData) {
-            console.log('Dados enviados para a planilha:', bookingData);
-            
-            // Em produção, isso seria uma chamada à API do Google Sheets
-            // Exemplo de como seria (requer configuração do backend):
-            /*
-            fetch('https://seuservidor.com/api/bookings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(bookingData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Sucesso:', data);
-            })
-            .catch((error) => {
-                console.error('Erro:', error);
-            });
-            */
-        }
-        
+     // Função para enviar dados para o Google Sheets
+async function sendToGoogleSheets(bookingData) {
+  try {
+    // URL do seu Web App do Google Apps Script
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbyVjD3QVFxT5uRfXWplYsqpUu40KdItusOYG97phHFUSBSGl6HeWvXmKI7-b9U63Wlj/exec';
+    
+    const response = await fetch(scriptUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bookingData)
+    });
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message);
+    }
+    
+    return result;
+    
+  } catch (error) {
+    console.error('Erro ao enviar para o Google Sheets:', error);
+    throw error;
+  }
+}
+
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             // Eventos dos botões de período
@@ -992,7 +1013,26 @@
                     changePeriod(this.dataset.period);
                 });
             });
-            
+
+            // Função para verificar reservas existentes
+async function checkIfBooked(date, period, classNumber, space) {
+  try {
+    const scriptUrl = 'SUA_URL_DO_WEB_APP';
+    const response = await fetch(scriptUrl);
+    const bookings = await response.json();
+    
+    return bookings.find(booking => 
+      booking.date === date && 
+      booking.period === period && 
+      booking.classNumber == classNumber && 
+      booking.space === space
+    );
+    
+  } catch (error) {
+    console.error('Erro ao verificar reservas:', error);
+    return null;
+  }
+}
             // Evento de mudança na seleção de turma
             document.getElementById('classGrade').addEventListener('change', function() {
                 if (this.value) {
