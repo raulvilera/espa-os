@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGENDAMENTO DE ESPAÇOS - LYDIA KITZ MOREIRA</title>
+    <title>Agendamento de Espaços - Lydia Kitz Moreira</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -51,51 +51,51 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 2rem;
-            padding: 2rem;
-            max-width: 1400px;
+            gap: 1rem;
+            padding: 1.5rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
         .space-card {
-            flex: 1 1 300px; /* Cresce, encolhe e base de 300px */
-            min-width: 280px;
-            max-width: 320px;
+            flex: 1;
+            min-width: 220px;
+            max-width: 240px;
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
         
         .space-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
         
         .space-image {
-            height: 180px;
+            height: 120px;
             background-size: cover;
             background-position: center;
         }
         
         .space-info {
-            padding: 1.5rem;
+            padding: 1rem;
         }
         
         .space-title {
-            font-size: 1.4rem;
-            margin: 0 0 0.8rem 0;
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
             color: var(--primary);
             text-align: center;
         }
         
         .space-description {
             color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-size: 0.8rem;
             text-align: center;
         }
         
@@ -103,7 +103,7 @@
             display: block;
             background: var(--secondary);
             color: white;
-            padding: 0.8rem 1.5rem;
+            padding: 0.6rem 1rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -111,7 +111,7 @@
             text-align: center;
             margin: 0 auto;
             width: fit-content;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
         }
         
         .btn-book:hover {
@@ -127,7 +127,6 @@
             font-size: 0.9rem;
         }
         
-        /* Modal Styles - Mantido o mesmo tamanho */
         .modal {
             display: none;
             position: fixed;
@@ -341,6 +340,13 @@
             font-size: 0.7rem;
         }
         
+        .interval-slot {
+            background-color: #f5f5f5 !important;
+            color: #666 !important;
+            cursor: not-allowed !important;
+            font-style: italic;
+        }
+        
         .class-slot.booked {
             background-color: #f5f5f5;
             color: #999;
@@ -378,40 +384,16 @@
             font-size: 0.7rem;
         }
         
-        @media (max-width: 1200px) {
-            .spaces-container {
-                gap: 1.5rem;
-            }
-            
-            .space-card {
-                flex: 1 1 280px;
-                max-width: 300px;
-            }
-        }
-        
-        @media (max-width: 992px) {
-            .spaces-container {
-                gap: 1.2rem;
-            }
-            
-            .space-card {
-                flex: 1 1 250px;
-                max-width: 280px;
-            }
-        }
-        
         @media (max-width: 768px) {
             .spaces-container {
-                flex-direction: row;
-                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: center;
                 gap: 1rem;
-                padding: 1.5rem;
             }
             
             .space-card {
-                flex: 1 1 45%;
-                min-width: 240px;
-                max-width: 100%;
+                min-width: 100%;
+                max-width: 280px;
             }
             
             .modal-content {
@@ -419,65 +401,55 @@
                 max-width: 300px;
                 padding: 0.8rem;
             }
-        }
-        
-        @media (max-width: 576px) {
-            .spaces-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 1.5rem;
+            
+            .week-days, .calendar-days {
+                grid-template-columns: repeat(5, 1fr);
             }
             
-            .space-card {
-                flex: 1 1 auto;
-                width: 100%;
-                max-width: 320px;
-            }
-            
-            .space-image {
-                height: 160px;
+            .calendar-day {
+                padding: 0.3rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">AGENDAMENTO DE ESPAÇOS</div>
+        <div class="logo">Agendamento de Espaços</div>
         <div class="subtitle">Escola Lydia Kitz Moreira - Guarulhos Norte</div>
     </header>
     
     <div class="spaces-container">
-        <div class="space-card" onclick="openModal('ANFITEATRO')">
+        <div class="space-card" onclick="openModal('anfiteatro')">
             <div class="space-image" style="background-image: url('https://blogger.googleusercontent.com/img/a/AVvXsEjxIbL06tdog26-DnJduIUX3-2-Eko81FR5AfM-N6djBKL-HpWYG2HQFYlo2X_9O6BbBNZMazBN2uM8mDF69sZsevk_mfy8dFDLyqaRt0P37iZ6u4s1ABAm-dCZZQ3cJCmEi3vTSomG6ec0o3oKGFuWHtczrPYha9k9CcQ4bcZKZOHzJsU42TM26ahB');"></div>
             <div class="space-info">
-                <h2 class="space-title">ANFITEATRO</h2>
+                <h2 class="space-title">Anfiteatro</h2>
                 <p class="space-description">Espaço para apresentações, palestras e eventos escolares.</p>
                 <a href="#" class="btn-book">Agendar</a>
             </div>
         </div>
         
-        <div class="space-card" onclick="openModal('LABORATÓRIO')">
+        <div class="space-card" onclick="openModal('laboratorio')">
             <div class="space-image" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi6gKPTxzAD2UInjA9eh_j7QR7qWs-z0APvSJ_ZRVlIaIKEzklOSQ1WFL8a9eaw88ZV01eUQXsLXnkhlBLFelzAl-QsTwGV_aRfPFwaoS148-t4cGDrLzpHFd-TOZb0E-YtY5DuBSzCBTRKr_CwhgV0rUmWU6snK3jmwUzyYrJs1t60qPWAGTFKJgly/s1360/WhatsApp%20Image%202022-07-27.webp');"></div>
             <div class="space-info">
-                <h2 class="space-title">LABORATÓRIO</h2>
+                <h2 class="space-title">Laboratório</h2>
                 <p class="space-description">Equipado para aulas práticas de ciências.</p>
                 <a href="#" class="btn-book">Agendar</a>
             </div>
         </div>
         
-        <div class="space-card" onclick="openModal('INFORMÁTICA')">
+        <div class="space-card" onclick="openModal('informatica')">
             <div class="space-image" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjcChyphenhyphen0HlNewS3mKX8q9JKpPUG-IAo2ZbEUOeC3dRUKpFQ80D0vDis84k6ha6uQQWaTJ-Och7poN-zyKYIwJlip3ijTGvEjqFZ6vBxKCTAFedkGkMK8NUiMvy6icoW4ms1b_VR_-XlX32oTUPW0_bgekTjkpg6tSTr7tV0vA0yynVlmaaN_sZvgaK4h/s1360/saladeinformatica.webp');"></div>
             <div class="space-info">
-                <h2 class="space-title">SALA DE INFORMÁTICA</h2>
+                <h2 class="space-title">Sala de Informática</h2>
                 <p class="space-description">Computadores modernos para aulas de tecnologia.</p>
                 <a href="#" class="btn-book">Agendar</a>
             </div>
         </div>
         
-        <div class="space-card" onclick="openModal('LEITURA')">
+        <div class="space-card" onclick="openModal('leitura')">
             <div class="space-image" style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
             <div class="space-info">
-                <h2 class="space-title">SALA DE LEITURA</h2>
+                <h2 class="space-title">Sala de Leitura</h2>
                 <p class="space-description">Ambiente tranquilo para estudo e pesquisa.</p>
                 <a href="#" class="btn-book">Agendar</a>
             </div>
@@ -493,7 +465,7 @@
             </div>
             
             <div class="form-group">
-                <label for="professorName">NOME DO PROEFESSOR</label>
+                <label for="professorName">Nome do Professor</label>
                 <input type="text" id="professorName" placeholder="Nome completo">
             </div>
             
@@ -503,7 +475,7 @@
             </div>
             
             <div class="form-group">
-                <label for="classGrade">SÉRIE/Turma</label>
+                <label for="classGrade">Série/Turma</label>
                 <select id="classGrade">
                     <option value="">Selecione uma turma</option>
                     <optgroup label="Manhã">
@@ -511,6 +483,8 @@
                         <option value="6°B">6°B</option>
                         <option value="6°C">6°C</option>
                         <option value="6°D">6°D</option>
+                        <option value="7°A">7°A</option>
+                        <option value="7°B">7°B</option>
                         <option value="2°A">2°A</option>
                         <option value="2°B">2°B</option>
                         <option value="2°C">2°C</option>
@@ -520,12 +494,20 @@
                     <optgroup label="Tarde">
                         <option value="6°E">6°E</option>
                         <option value="6°F">6°F</option>
-                        <option value="7°A">7°A</option>
-                        <option value="7°B">7°B</option>
                         <option value="7°C">7°C</option>
                         <option value="7°D">7°D</option>
                         <option value="7°E">7°E</option>
                         <option value="7°F">7°F</option>
+                        <option value="8°A">8°A</option>
+                        <option value="8°B">8°B</option>
+                        <option value="9°A">9°A</option>
+                        <option value="9°B">9°B</option>
+                        <option value="1°A">1°A</option>
+                        <option value="1°B">1°B</option>
+                        <option value="1°C">1°C</option>
+                        <option value="1°D">1°D</option>
+                        <option value="1°E">1°E</option>
+                        <option value="1°F">1°F</option>
                         <option value="1°G">1°G</option>
                     </optgroup>
                     <optgroup label="Noite">
@@ -533,6 +515,9 @@
                         <option value="2°G">2°G</option>
                         <option value="2°H">2°H</option>
                         <option value="2°I">2°I</option>
+                        <option value="3°A">3°A</option>
+                        <option value="3°B">3°B</option>
+                        <option value="3°C">3°C</option>
                         <option value="3°D">3°D</option>
                         <option value="3°E">3°E</option>
                         <option value="3°F">3°F</option>
@@ -595,16 +580,16 @@
             header.className = 'modal-header';
             
             // Definir título e cor do modal conforme o espaço
-            if (space === 'ANFITEATRO') {
+            if (space === 'anfiteatro') {
                 title.textContent = 'Agendar Anfiteatro';
                 header.classList.add('anfiteatro-header');
-            } else if (space === 'LABORATÓRIO') {
+            } else if (space === 'laboratorio') {
                 title.textContent = 'Agendar Laboratório';
                 header.classList.add('laboratorio-header');
-            } else if (space === 'INFORMÁTICA') {
+            } else if (space === 'informatica') {
                 title.textContent = 'Agendar Sala de Informática';
                 header.classList.add('informatica-header');
-            } else if (space === 'LEITURA') {
+            } else if (space === 'leitura') {
                 title.textContent = 'Agendar Sala de Leitura';
                 header.classList.add('leitura-header');
             }
@@ -614,13 +599,13 @@
             
             // Mostrar modal
             modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Impede rolagem da página
+            document.body.style.overflow = 'hidden';
         }
         
         // Fechar modal
         function closeModal() {
             document.getElementById('bookingModal').style.display = 'none';
-            document.body.style.overflow = 'auto'; // Restaura rolagem
+            document.body.style.overflow = 'auto';
             resetForm();
         }
         
@@ -746,35 +731,64 @@
             
             let classes = [];
             
+            // Verificar se é ensino fundamental (6° ao 9° ano) ou médio (1° ao 3° ano)
+            const isFundamental = /^[6-9]°/.test(classGrade);
+            const isMedio = /^[1-3]°/.test(classGrade);
+            
             // Definir aulas conforme período
             if (selectedPeriod === 'manha') {
-                classes = ['1ª Aula (07:00-07:50)', '2ª Aula (07:50-08:40)', '3ª Aula (08:40-09:30)', 
-                          '4ª Aula (09:50-10:40)', '5ª Aula (10:40-11:30)', '6ª Aula (11:30-12:20)'];
+                classes = [
+                    '1ª Aula (07:00-07:50)', 
+                    '2ª Aula (07:50-08:40)', 
+                    '3ª Aula (08:40-09:30)',
+                    isFundamental ? 'Intervalo (09:30-09:50)' : 'Intervalo (10:20-10:40)',
+                    '4ª Aula (' + (isFundamental ? '09:50' : '10:40') + '-11:30)', 
+                    '5ª Aula (11:30-12:20)'
+                ];
             } else if (selectedPeriod === 'tarde') {
-                classes = ['1ª Aula (13:00-13:50)', '2ª Aula (13:50-14:40)', '3ª Aula (14:40-15:30)', 
-                          '4ª Aula (15:50-16:40)', '5ª Aula (16:40-17:30)', '6ª Aula (17:30-18:20)'];
+                classes = [
+                    '1ª Aula (13:00-13:50)', 
+                    '2ª Aula (13:50-14:40)', 
+                    '3ª Aula (14:40-15:30)',
+                    isFundamental ? 'Intervalo (15:30-15:50)' : 'Intervalo (16:00-16:20)',
+                    '4ª Aula (' + (isFundamental ? '15:50' : '16:20') + '-17:10)', 
+                    '5ª Aula (17:10-18:00)'
+                ];
             } else if (selectedPeriod === 'noite') {
-                classes = ['1ª Aula (19:00-19:45)', '2ª Aula (19:45-20:30)', '3ª Aula (20:50-21:35)', 
-                          '4ª Aula (21:35-22:15)', '5ª Aula (22:15-23:00)'];
+                classes = [
+                    '1ª Aula (19:00-19:45)', 
+                    '2ª Aula (19:45-20:30)', 
+                    'Intervalo (20:30-20:50)',
+                    '3ª Aula (20:50-21:35)', 
+                    '4ª Aula (21:35-22:15)', 
+                    '5ª Aula (22:15-23:00)'
+                ];
             }
             
             // Criar elementos das aulas
             classes.forEach((classTime, index) => {
                 const classElement = document.createElement('div');
                 classElement.classList.add('class-slot');
-                classElement.textContent = classTime;
-                classElement.dataset.class = index + 1; // 1-6 para manhã/tarde, 1-5 para noite
                 
-                // Verificar se já está reservado (simulação - em produção viria da planilha)
-                const isBooked = checkIfBooked(selectedDate, selectedPeriod, index + 1, currentSpace);
-                
-                if (isBooked) {
-                    classElement.classList.add('booked');
-                    classElement.title = `Reservado por ${isBooked.professor} para ${isBooked.classGrade}`;
+                // Verificar se é um intervalo para estilização diferente
+                if (classTime.includes('Intervalo')) {
+                    classElement.textContent = classTime;
+                    classElement.classList.add('interval-slot');
                 } else {
-                    classElement.addEventListener('click', function() {
-                        selectClass(this);
-                    });
+                    classElement.textContent = classTime;
+                    classElement.dataset.class = index + 1;
+                    
+                    // Verificar se já está reservado
+                    const isBooked = checkIfBooked(selectedDate, selectedPeriod, index + 1, currentSpace);
+                    
+                    if (isBooked) {
+                        classElement.classList.add('booked');
+                        classElement.title = `Reservado por ${isBooked.professor} para ${isBooked.classGrade}`;
+                    } else {
+                        classElement.addEventListener('click', function() {
+                            selectClass(this);
+                        });
+                    }
                 }
                 
                 classesGrid.appendChild(classElement);
@@ -844,14 +858,14 @@
         
         // Determinar período com base na turma selecionada
         function determinePeriodByClass(classGrade) {
-            // Turmas da manhã
-            const morningClasses = ['6°A', '6°B', '6°C', '6°D', '2°A', '2°B', '2°C', '2°D', '2°E'];
+            // Turmas da manhã - Fundamental (6° ao 9°) e Médio (2° ano)
+            const morningClasses = ['6°A', '6°B', '6°C', '6°D', '7°A', '7°B', '7°C', '7°D', '2°A', '2°B', '2°C', '2°D', '2°E'];
             
-            // Turmas da tarde
-            const afternoonClasses = ['6°E', '6°F', '7°A', '7°B', '7°C', '7°D', '7°E', '7°F', '1°G'];
+            // Turmas da tarde - Fundamental (6° ao 9°) e Médio (1° ano)
+            const afternoonClasses = ['6°E', '6°F', '7°E', '7°F', '8°A', '8°B', '8°C', '9°A', '9°B', '1°A', '1°B', '1°C', '1°D', '1°E', '1°F', '1°G'];
             
-            // Turmas da noite
-            const nightClasses = ['2°F', '2°G', '2°H', '2°I', '3°D', '3°E', '3°F', '3°G'];
+            // Turmas da noite - Médio (2° e 3° ano)
+            const nightClasses = ['2°F', '2°G', '2°H', '2°I', '3°A', '3°B', '3°C', '3°D', '3°E', '3°F', '3°G'];
             
             if (morningClasses.includes(classGrade)) {
                 return 'manha';
@@ -910,8 +924,8 @@
             
             // Em produção, isso seria uma chamada à API do Google Sheets
             // Exemplo de como seria (requer configuração do backend):
-            
-            fetch('https://script.google.com/macros/s/AKfycbzmBhDMXB32nLCI_PaAGaQ7E3OkBWWswhgVDgX8ZoNszDiQMl2gNgfQQalUHX_iSoib/exec', {
+            /*
+            fetch('https://seuservidor.com/api/bookings', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
