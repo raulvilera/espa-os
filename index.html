@@ -51,51 +51,51 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 1rem; /* Reduzi o gap entre os cards */
-            padding: 1.5rem;
-            max-width: 1200px;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
         .space-card {
-            flex: 1;
-            min-width: 220px; /* Reduzi a largura mínima */
-            max-width: 240px; /* Reduzi a largura máxima */
+            flex: 1 1 300px; /* Cresce, encolhe e base de 300px */
+            min-width: 280px;
+            max-width: 320px;
             background: white;
-            border-radius: 10px; /* Reduzi o border-radius */
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Reduzi a sombra */
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
         
         .space-card:hover {
-            transform: translateY(-3px); /* Reduzi o efeito de hover */
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
         }
         
         .space-image {
-            height: 120px; /* Reduzi a altura da imagem */
+            height: 180px;
             background-size: cover;
             background-position: center;
         }
         
         .space-info {
-            padding: 1rem; /* Reduzi o padding */
+            padding: 1.5rem;
         }
         
         .space-title {
-            font-size: 1.1rem; /* Reduzi o tamanho da fonte */
-            margin: 0 0 0.5rem 0;
+            font-size: 1.4rem;
+            margin: 0 0 0.8rem 0;
             color: var(--primary);
             text-align: center;
         }
         
         .space-description {
             color: #666;
-            margin-bottom: 1rem;
-            line-height: 1.4;
-            font-size: 0.8rem; /* Reduzi a fonte */
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            font-size: 0.95rem;
             text-align: center;
         }
         
@@ -103,7 +103,7 @@
             display: block;
             background: var(--secondary);
             color: white;
-            padding: 0.6rem 1rem; /* Reduzi o padding */
+            padding: 0.8rem 1.5rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -111,7 +111,7 @@
             text-align: center;
             margin: 0 auto;
             width: fit-content;
-            font-size: 0.8rem; /* Reduzi a fonte */
+            font-size: 0.95rem;
         }
         
         .btn-book:hover {
@@ -127,7 +127,7 @@
             font-size: 0.9rem;
         }
         
-        /* Modal Styles - Compacto e Centralizado */
+        /* Modal Styles - Mantido o mesmo tamanho */
         .modal {
             display: none;
             position: fixed;
@@ -146,13 +146,13 @@
             padding: 1rem;
             border-radius: 8px;
             width: 90%;
-            max-width: 320px; /* Diminuí ainda mais o tamanho máximo do modal */
+            max-width: 320px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             position: relative;
             top: 50%;
             transform: translateY(-50%);
-            max-height: 90vh; /* Limita a altura máxima */
-            overflow-y: auto; /* Adiciona scroll se necessário */
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-header {
@@ -181,9 +181,9 @@
         
         .modal-title {
             margin: 0;
-            font-size: 1rem; /* Diminuí um pouco a fonte */
+            font-size: 1rem;
             font-weight: 600;
-            padding: 0 1.5rem; /* Reduzi o padding */
+            padding: 0 1.5rem;
         }
         
         .close-modal {
@@ -216,7 +216,6 @@
             box-sizing: border-box;
         }
         
-        /* Ajustei os campos específicos para não extrapolarem */
         #professorName, #professorEmail {
             width: calc(100% - 1rem);
             max-width: 100%;
@@ -307,7 +306,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 0.2rem;
-            max-height: 150px; /* Reduzi a altura máxima */
+            max-height: 150px;
             overflow-y: auto;
             padding: 0.2rem;
         }
@@ -379,16 +378,40 @@
             font-size: 0.7rem;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
             .spaces-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
+                gap: 1.5rem;
             }
             
             .space-card {
-                min-width: 100%;
+                flex: 1 1 280px;
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .spaces-container {
+                gap: 1.2rem;
+            }
+            
+            .space-card {
+                flex: 1 1 250px;
                 max-width: 280px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .spaces-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .space-card {
+                flex: 1 1 45%;
+                min-width: 240px;
+                max-width: 100%;
             }
             
             .modal-content {
@@ -396,13 +419,23 @@
                 max-width: 300px;
                 padding: 0.8rem;
             }
-            
-            .week-days, .calendar-days {
-                grid-template-columns: repeat(5, 1fr);
+        }
+        
+        @media (max-width: 576px) {
+            .spaces-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
             }
             
-            .calendar-day {
-                padding: 0.3rem;
+            .space-card {
+                flex: 1 1 auto;
+                width: 100%;
+                max-width: 320px;
+            }
+            
+            .space-image {
+                height: 160px;
             }
         }
     </style>
