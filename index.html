@@ -895,7 +895,35 @@
             };
             
             // Enviar para a planilha Google (simulação)
-            sendToGoogleSheets(bookingData);
+            async function sendToGoogleSheets(bookingData) {
+  const SCRIPT_URL = 'SUA_URL_DO_WEB_APP'; // Cole a URL do web app aqui
+  
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bookingData)
+    });
+    
+    if (!response.ok) {
+      throw new Error('Erro na rede');
+    }
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message || 'Erro no servidor');
+    }
+    
+    return result;
+    
+  } catch (error) {
+    console.error('Erro:', error);
+    throw error;
+  }
+}
             
             // Fechar modal e resetar formulário
             closeModal();
