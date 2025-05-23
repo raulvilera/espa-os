@@ -118,6 +118,133 @@
             background: #2980b9;
         }
         
+        /* Calendário de Histórico */
+        .history-calendar {
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+        
+        .history-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            text-align: center;
+        }
+        
+        .mini-calendar {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+        
+        .mini-calendar th {
+            font-size: 0.6rem;
+            text-align: center;
+            padding: 0.2rem;
+            color: #666;
+        }
+        
+        .mini-calendar td {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.3rem;
+            border: 1px solid #eee;
+            position: relative;
+        }
+        
+        .mini-calendar .day-number {
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .mini-calendar .has-booking {
+            background-color: rgba(52, 152, 219, 0.1);
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .mini-calendar .has-booking:hover {
+            background-color: rgba(52, 152, 219, 0.2);
+        }
+        
+        .mini-calendar .today {
+            background-color: rgba(231, 76, 60, 0.1);
+            font-weight: bold;
+        }
+        
+        .mini-calendar .other-month {
+            color: #ccc;
+        }
+        
+        .mini-calendar .booking-count {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            font-size: 0.5rem;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            line-height: 12px;
+            text-align: center;
+        }
+        
+        .booking-details {
+            display: none;
+            position: absolute;
+            z-index: 100;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 200px;
+            font-size: 0.7rem;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+        }
+        
+        .has-booking:hover .booking-details {
+            display: block;
+        }
+        
+        .booking-item {
+            margin-bottom: 0.3rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .booking-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .booking-period {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .booking-class {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .booking-professor {
+            color: #666;
+        }
+        
+        .no-history {
+            font-size: 0.8rem;
+            color: #999;
+            text-align: center;
+            font-style: italic;
+        }
+        
         footer {
             background: var(--dark);
             color: white;
@@ -477,6 +604,12 @@
                 <h2 class="space-title">Anfiteatro</h2>
                 <p class="space-description">Espaço para apresentações, palestras e eventos escolares.</p>
                 <a href="#" class="btn-book">Agendar</a>
+                
+                <!-- Calendário de Histórico -->
+                <div class="history-calendar" id="anfiteatro-history">
+                    <div class="history-title">Calendário de Agendamentos</div>
+                    <div class="no-history">Carregando calendário...</div>
+                </div>
             </div>
         </div>
         
@@ -486,6 +619,12 @@
                 <h2 class="space-title">Laboratório</h2>
                 <p class="space-description">Equipado para aulas práticas de ciências.</p>
                 <a href="#" class="btn-book">Agendar</a>
+                
+                <!-- Calendário de Histórico -->
+                <div class="history-calendar" id="laboratorio-history">
+                    <div class="history-title">Calendário de Agendamentos</div>
+                    <div class="no-history">Carregando calendário...</div>
+                </div>
             </div>
         </div>
         
@@ -495,6 +634,12 @@
                 <h2 class="space-title">Sala de Informática</h2>
                 <p class="space-description">Computadores modernos para aulas de tecnologia.</p>
                 <a href="#" class="btn-book">Agendar</a>
+                
+                <!-- Calendário de Histórico -->
+                <div class="history-calendar" id="informatica-history">
+                    <div class="history-title">Calendário de Agendamentos</div>
+                    <div class="no-history">Carregando calendário...</div>
+                </div>
             </div>
         </div>
         
@@ -504,6 +649,12 @@
                 <h2 class="space-title">Sala de Leitura</h2>
                 <p class="space-description">Ambiente tranquilo para estudo e pesquisa.</p>
                 <a href="#" class="btn-book">Agendar</a>
+                
+                <!-- Calendário de Histórico -->
+                <div class="history-calendar" id="leitura-history">
+                    <div class="history-title">Calendário de Agendamentos</div>
+                    <div class="no-history">Carregando calendário...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -979,6 +1130,9 @@
                 // Fechar modal e resetar formulário
                 closeModal();
                 
+                // Atualizar calendário de histórico
+                generateHistoryCalendar(currentSpace);
+                
                 // Mostrar mensagem de sucesso
                 alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
                 
@@ -1026,6 +1180,164 @@
             }
         }
         
+        // Gerar calendário de histórico para um espaço específico
+        async function generateHistoryCalendar(space) {
+            const historyContainer = document.getElementById(`${space}-history`);
+            
+            try {
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbxh3EActKEDTWgA0YlKovOdYgL2EZ9P0DOnPoy6vF_DlDoVeG17N4xZMsFAv3rbCLH0/exec';
+                const response = await fetch(scriptUrl);
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar histórico');
+                }
+                
+                const allBookings = await response.json();
+                
+                // Filtrar apenas os agendamentos para este espaço
+                const spaceBookings = allBookings.filter(booking => booking.space === space);
+                
+                if (spaceBookings.length === 0) {
+                    historyContainer.innerHTML = `
+                        <div class="history-title">Calendário de Agendamentos</div>
+                        <div class="no-history">Nenhum agendamento registrado ainda.</div>
+                    `;
+                    return;
+                }
+                
+                // Obter data atual
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+                
+                // Obter primeiro dia do mês
+                const firstDay = new Date(currentYear, currentMonth, 1);
+                
+                // Obter último dia do mês
+                const lastDay = new Date(currentYear, currentMonth + 1, 0);
+                
+                // Obter dia da semana do primeiro dia (0=Domingo, 1=Segunda, etc.)
+                let firstDayOfWeek = firstDay.getDay();
+                
+                // Criar tabela do calendário
+                let calendarHTML = `
+                    <div class="history-title">Calendário de Agendamentos - ${getMonthName(currentMonth)} ${currentYear}</div>
+                    <table class="mini-calendar">
+                        <thead>
+                            <tr>
+                                <th>Dom</th>
+                                <th>Seg</th>
+                                <th>Ter</th>
+                                <th>Qua</th>
+                                <th>Qui</th>
+                                <th>Sex</th>
+                                <th>Sáb</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                `;
+                
+                // Adicionar células vazias para dias do mês anterior
+                for (let i = 0; i < firstDayOfWeek; i++) {
+                    calendarHTML += `<td class="other-month"></td>`;
+                }
+                
+                // Adicionar dias do mês
+                let dayCounter = 1;
+                let currentDayOfWeek = firstDayOfWeek;
+                
+                for (let day = 1; day <= lastDay.getDate(); day++) {
+                    const date = new Date(currentYear, currentMonth, day);
+                    const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    // Verificar se há agendamentos para este dia
+                    const dayBookings = spaceBookings.filter(booking => booking.date === formattedDate);
+                    
+                    // Determinar classes CSS
+                    let dayClasses = [];
+                    if (date.toDateString() === now.toDateString()) {
+                        dayClasses.push('today');
+                    }
+                    if (dayBookings.length > 0) {
+                        dayClasses.push('has-booking');
+                    }
+                    
+                    calendarHTML += `<td class="${dayClasses.join(' ')}" data-date="${formattedDate}">`;
+                    calendarHTML += `<span class="day-number">${day}</span>`;
+                    
+                    // Adicionar contador de agendamentos
+                    if (dayBookings.length > 0) {
+                        calendarHTML += `<span class="booking-count">${dayBookings.length}</span>`;
+                        
+                        // Criar tooltip com detalhes dos agendamentos
+                        calendarHTML += `<div class="booking-details">`;
+                        dayBookings.forEach(booking => {
+                            calendarHTML += `
+                                <div class="booking-item">
+                                    <div class="booking-period">${formatPeriod(booking.period)} - Aula ${booking.classNumber}</div>
+                                    <div class="booking-class">${booking.classGrade}</div>
+                                    <div class="booking-professor">Prof. ${booking.professorName}</div>
+                                </div>
+                            `;
+                        });
+                        calendarHTML += `</div>`;
+                    }
+                    
+                    calendarHTML += `</td>`;
+                    
+                    // Quebrar linha no final da semana
+                    currentDayOfWeek++;
+                    if (currentDayOfWeek > 6) {
+                        currentDayOfWeek = 0;
+                        if (day < lastDay.getDate()) {
+                            calendarHTML += `</tr><tr>`;
+                        }
+                    }
+                }
+                
+                // Adicionar células vazias para completar a última linha
+                while (currentDayOfWeek > 0 && currentDayOfWeek < 7) {
+                    calendarHTML += `<td class="other-month"></td>`;
+                    currentDayOfWeek++;
+                }
+                
+                calendarHTML += `
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+                
+                // Atualizar container
+                historyContainer.innerHTML = calendarHTML;
+                
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+                
+                historyContainer.innerHTML = `
+                    <div class="history-title">Calendário de Agendamentos</div>
+                    <div class="no-history">Erro ao carregar calendário. Tente recarregar a página.</div>
+                `;
+            }
+        }
+        
+        // Obter nome do mês
+        function getMonthName(monthIndex) {
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
+                              "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            return monthNames[monthIndex];
+        }
+        
+        // Formatar período para exibição
+        function formatPeriod(period) {
+            const periods = {
+                'manha': 'Manhã',
+                'tarde': 'Tarde',
+                'noite': 'Noite'
+            };
+            return periods[period] || period;
+        }
+        
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             // Eventos dos botões de período
@@ -1046,6 +1358,11 @@
                         loadClasses();
                     }
                 }
+            });
+            
+            // Carregar calendários de histórico para cada espaço
+            ['anfiteatro', 'laboratorio', 'informatica', 'leitura'].forEach(space => {
+                generateHistoryCalendar(space);
             });
         });
         
