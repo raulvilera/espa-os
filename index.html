@@ -51,41 +51,41 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 2rem; /* Aumentei o espaçamento entre os cards */
+            gap: 2rem;
             padding: 2rem;
-            max-width: 1400px; /* Aumentei a largura máxima */
+            max-width: 1400px;
             margin: 0 auto;
         }
         
         .space-card {
-            flex: 1 1 300px; /* Cresce, encolhe e base de 300px */
-            min-width: 280px; /* Aumentei a largura mínima */
-            max-width: 320px; /* Aumentei a largura máxima */
+            flex: 1 1 300px;
+            min-width: 280px;
+            max-width: 320px;
             background: white;
-            border-radius: 12px; /* Aumentei o border-radius */
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* Aumentei a sombra */
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
         
         .space-card:hover {
-            transform: translateY(-5px); /* Aumentei o efeito de hover */
+            transform: translateY(-5px);
             box-shadow: 0 12px 24px rgba(0,0,0,0.2);
         }
         
         .space-image {
-            height: 180px; /* Aumentei a altura da imagem */
+            height: 180px;
             background-size: cover;
             background-position: center;
         }
         
         .space-info {
-            padding: 1.5rem; /* Aumentei o padding */
+            padding: 1.5rem;
         }
         
         .space-title {
-            font-size: 1.3rem; /* Aumentei o tamanho da fonte */
+            font-size: 1.3rem;
             margin: 0 0 0.8rem 0;
             color: var(--primary);
             text-align: center;
@@ -95,7 +95,7 @@
             color: #666;
             margin-bottom: 1.5rem;
             line-height: 1.5;
-            font-size: 0.9rem; /* Aumentei a fonte */
+            font-size: 0.9rem;
             text-align: center;
         }
         
@@ -103,7 +103,7 @@
             display: block;
             background: var(--secondary);
             color: white;
-            padding: 0.8rem 1.5rem; /* Aumentei o padding */
+            padding: 0.8rem 1.5rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -111,7 +111,7 @@
             text-align: center;
             margin: 0 auto;
             width: fit-content;
-            font-size: 0.9rem; /* Aumentei a fonte */
+            font-size: 0.9rem;
         }
         
         .btn-book:hover {
@@ -127,7 +127,7 @@
             font-size: 0.9rem;
         }
         
-        /* Modal Styles - Mantive o mesmo tamanho */
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -385,6 +385,16 @@
             font-size: 0.7rem;
         }
         
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 1200px) {
             .spaces-container {
                 max-width: 1000px;
@@ -498,7 +508,7 @@
         </div>
     </div>
     
-    <!-- Modal de Agendamento Compacto -->
+    <!-- Modal de Agendamento -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
             <div class="modal-header" id="modalHeader">
@@ -764,7 +774,7 @@
         }
         
         // Carregar aulas conforme período selecionado
-        function loadClasses() {
+        async function loadClasses() {
             const classGrade = document.getElementById('classGrade').value;
             if (!classGrade || !selectedDate) return;
             
@@ -808,7 +818,8 @@
             }
             
             // Criar elementos das aulas
-            classes.forEach((classTime, index) => {
+            for (let i = 0; i < classes.length; i++) {
+                const classTime = classes[i];
                 const classElement = document.createElement('div');
                 classElement.classList.add('class-slot');
                 
@@ -818,56 +829,58 @@
                     classElement.classList.add('interval-slot');
                 } else {
                     classElement.textContent = classTime;
-                    classElement.dataset.class = index + 1;
+                    classElement.dataset.class = i + 1;
                     
                     // Verificar se já está reservado
-                    const isBooked = checkIfBooked(selectedDate, selectedPeriod, index + 1, currentSpace);
-                    
-                    if (isBooked) {
-                        classElement.classList.add('booked');
-                        classElement.title = `Reservado por ${isBooked.professor} para ${isBooked.classGrade}`;
-                    } else {
+                    try {
+                        const isBooked = await checkIfBooked(selectedDate, selectedPeriod, i + 1, currentSpace);
+                        
+                        if (isBooked) {
+                            classElement.classList.add('booked');
+                            classElement.title = `Reservado por ${isBooked.professor} para ${isBooked.classGrade}`;
+                        } else {
+                            classElement.addEventListener('click', function() {
+                                selectClass(this);
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Erro ao verificar reserva:', error);
+                        // Em caso de erro, permitir seleção mas mostrar aviso
                         classElement.addEventListener('click', function() {
                             selectClass(this);
                         });
+                        classElement.style.borderColor = 'orange';
+                        classElement.title = 'Não foi possível verificar disponibilidade';
                     }
                 }
                 
                 classesGrid.appendChild(classElement);
-            });
+            }
         }
         
-        // Verificar se aula já está reservada (simulação)
-        function checkIfBooked(date, period, classNumber, space) {
-            // Em produção, isso seria uma chamada à API para verificar na planilha
-            // Aqui é apenas uma simulação para demonstração
-            
-            // Algumas reservas fictícias para demonstração
-            const fakeBookings = [
-                {
-                    date: new Date().toISOString().split('T')[0], // Data atual
-                    period: 'manha',
-                    classNumber: 1,
-                    space: 'anfiteatro',
-                    professor: 'Alexandre Silva Lima',
-                    classGrade: '6°A'
-                },
-                {
-                    date: new Date().toISOString().split('T')[0], // Data atual
-                    period: 'tarde',
-                    classNumber: 3,
-                    space: 'laboratorio',
-                    professor: 'Ana Paula dos Santos',
-                    classGrade: '7°B'
+        // Verificar se aula já está reservada
+        async function checkIfBooked(date, period, classNumber, space) {
+            try {
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbxh3EActKEDTWgA0YlKovOdYgL2EZ9P0DOnPoy6vF_DlDoVeG17N4xZMsFAv3rbCLH0/exec';
+                const response = await fetch(scriptUrl);
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao verificar reservas');
                 }
-            ];
-            
-            return fakeBookings.find(booking => 
-                booking.date === date && 
-                booking.period === period && 
-                booking.classNumber === classNumber && 
-                booking.space === space
-            );
+                
+                const bookings = await response.json();
+                
+                return bookings.find(booking => 
+                    booking.date === date && 
+                    booking.period === period && 
+                    booking.classNumber == classNumber && 
+                    booking.space === space
+                );
+                
+            } catch (error) {
+                console.error('Erro ao verificar reservas:', error);
+                throw error;
+            }
         }
         
         // Selecionar aula
@@ -920,91 +933,99 @@
             return 'manha'; // padrão
         }
         
-// Confirmar agendamento
-async function confirmBooking() {
-  const professorName = document.getElementById('professorName').value.trim();
-  const professorEmail = document.getElementById('professorEmail').value.trim();
-  const classGrade = document.getElementById('classGrade').value;
-  
-  // Validar campos
-  if (!professorName || !professorEmail || !classGrade || !selectedDate || !selectedClass) {
-    alert('Por favor, preencha todos os campos e selecione uma data e aula.');
-    return;
-  }
-  
-  // Validar e-mail institucional
-  if (!professorEmail.endsWith('@prof.educacao.sp.gov.br')) {
-    alert('Por favor, utilize seu e-mail institucional (@prof.educacao.sp.gov.br)');
-    return;
-  }
-  
-  // Criar objeto com dados do agendamento
-  const bookingData = {
-    space: currentSpace,
-    date: selectedDate,
-    period: selectedPeriod,
-    classNumber: selectedClass,
-    professorName: professorName,
-    professorEmail: professorEmail,
-    classGrade: classGrade,
-    timestamp: new Date().toISOString()
-  };
-  
-  try {
-    // Mostrar loading
-    const confirmBtn = document.querySelector('.btn-confirm');
-    confirmBtn.disabled = true;
-    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-    
-    // Enviar para o Google Sheets
-    await sendToGoogleSheets(bookingData);
-    
-    // Fechar modal e resetar formulário
-    closeModal();
-    
-    // Mostrar mensagem de sucesso
-    alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
-    
-  } catch (error) {
-    alert('Erro ao salvar agendamento: ' + error.message);
-    console.error(error);
-    
-    // Restaurar botão
-    const confirmBtn = document.querySelector('.btn-confirm');
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = 'Confirmar Agendamento';
-  }
-}
+        // Confirmar agendamento
+        async function confirmBooking() {
+            const professorName = document.getElementById('professorName').value.trim();
+            const professorEmail = document.getElementById('professorEmail').value.trim();
+            const classGrade = document.getElementById('classGrade').value;
+            
+            // Validar campos
+            if (!professorName || !professorEmail || !classGrade || !selectedDate || !selectedClass) {
+                alert('Por favor, preencha todos os campos e selecione uma data e aula.');
+                return;
+            }
+            
+            // Validar e-mail institucional
+            if (!professorEmail.endsWith('@prof.educacao.sp.gov.br')) {
+                alert('Por favor, utilize seu e-mail institucional (@prof.educacao.sp.gov.br)');
+                return;
+            }
+            
+            // Criar objeto com dados do agendamento
+            const bookingData = {
+                space: currentSpace,
+                date: selectedDate,
+                period: selectedPeriod,
+                classNumber: selectedClass,
+                professorName: professorName,
+                professorEmail: professorEmail,
+                classGrade: classGrade,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                // Mostrar loading
+                const confirmBtn = document.querySelector('.btn-confirm');
+                confirmBtn.disabled = true;
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                
+                // Enviar para o Google Sheets
+                const result = await sendToGoogleSheets(bookingData);
+                
+                if (!result.success) {
+                    throw new Error(result.message || 'Erro ao salvar agendamento');
+                }
+                
+                // Fechar modal e resetar formulário
+                closeModal();
+                
+                // Mostrar mensagem de sucesso
+                alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
+                
+            } catch (error) {
+                alert('Erro ao salvar agendamento: ' + error.message);
+                console.error(error);
+                
+                // Restaurar botão
+                const confirmBtn = document.querySelector('.btn-confirm');
+                if (confirmBtn) {
+                    confirmBtn.disabled = false;
+                    confirmBtn.innerHTML = 'Confirmar Agendamento';
+                }
+            }
+        }
         
-        // Enviar dados para a planilha Google (simulação)
-     // Função para enviar dados para o Google Sheets
-async function sendToGoogleSheets(bookingData) {
-  try {
-    // URL do seu Web App do Google Apps Script
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbyVjD3QVFxT5uRfXWplYsqpUu40KdItusOYG97phHFUSBSGl6HeWvXmKI7-b9U63Wlj/exec';
-    
-    const response = await fetch(scriptUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bookingData)
-    });
-    
-    const result = await response.json();
-    
-    if (!result.success) {
-      throw new Error(result.message);
-    }
-    
-    return result;
-    
-  } catch (error) {
-    console.error('Erro ao enviar para o Google Sheets:', error);
-    throw error;
-  }
-}
-
+        // Enviar dados para o Google Sheets
+        async function sendToGoogleSheets(bookingData) {
+            try {
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbyVjD3QVFxT5uRfXWplYsqpUu40KdItusOYG97phHFUSBSGl6HeWvXmKI7-b9U63Wlj/exec';
+                
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro na resposta do servidor');
+                }
+                
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.message || 'Erro ao salvar agendamento');
+                }
+                
+                return result;
+                
+            } catch (error) {
+                console.error('Erro ao enviar para o Google Sheets:', error);
+                throw error;
+            }
+        }
+        
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             // Eventos dos botões de período
@@ -1013,26 +1034,7 @@ async function sendToGoogleSheets(bookingData) {
                     changePeriod(this.dataset.period);
                 });
             });
-
-            // Função para verificar reservas existentes
-async function checkIfBooked(date, period, classNumber, space) {
-  try {
-    const scriptUrl = 'SUA_URL_DO_WEB_APP';
-    const response = await fetch(scriptUrl);
-    const bookings = await response.json();
-    
-    return bookings.find(booking => 
-      booking.date === date && 
-      booking.period === period && 
-      booking.classNumber == classNumber && 
-      booking.space === space
-    );
-    
-  } catch (error) {
-    console.error('Erro ao verificar reservas:', error);
-    return null;
-  }
-}
+            
             // Evento de mudança na seleção de turma
             document.getElementById('classGrade').addEventListener('change', function() {
                 if (this.value) {
