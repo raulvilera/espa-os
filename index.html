@@ -17,6 +17,7 @@
             --laboratorio: linear-gradient(135deg, #ffc107, #ff9800);
             --informatica: linear-gradient(135deg, #4caf50, #2e7d32);
             --leitura: linear-gradient(135deg, #9c27b0, #6a1b9a);
+            --success: #4CAF50;
         }
         
         body {
@@ -176,6 +177,11 @@
         
         .mini-calendar .other-month {
             color: #ccc;
+        }
+        
+        .mini-calendar .selected-date {
+            background-color: var(--success);
+            color: white;
         }
         
         .mini-calendar .booking-count {
@@ -397,7 +403,7 @@
         }
         
         .calendar-day.selected {
-            background-color: var(--secondary);
+            background-color: var(--success);
             color: white;
         }
         
@@ -453,9 +459,9 @@
         }
         
         .class-slot.selected {
-            background-color: #4CAF50;
+            background-color: var(--success);
             color: white;
-            border-color: #4CAF50;
+            border-color: var(--success);
             position: relative;
         }
         
@@ -502,7 +508,7 @@
         }
         
         .btn-confirm {
-            background-color: #4CAF50;
+            background-color: var(--success);
             color: white;
             border: none;
             padding: 0.5rem 0.8rem;
@@ -520,6 +526,119 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Full Calendar Styles */
+        .full-calendar-container {
+            margin: 2rem auto;
+            max-width: 1200px;
+            padding: 0 1rem;
+        }
+        
+        .full-calendar {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .full-calendar th {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .full-calendar td {
+            border: 1px solid #ddd;
+            padding: 0.3rem;
+            height: 80px;
+            vertical-align: top;
+            font-size: 0.7rem;
+        }
+        
+        .full-calendar .day-number {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+        }
+        
+        .full-calendar .other-month {
+            background-color: #f9f9f9;
+            color: #ccc;
+        }
+        
+        .full-calendar .today {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .full-calendar .selected-date {
+            background-color: rgba(76, 175, 80, 0.2);
+        }
+        
+        .full-calendar .booking {
+            background-color: rgba(52, 152, 219, 0.2);
+            border-left: 3px solid var(--secondary);
+            padding: 0.2rem;
+            margin-bottom: 0.2rem;
+            border-radius: 2px;
+            font-size: 0.65rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        
+        .full-calendar .booking.user-booking {
+            border-left: 3px solid var(--accent);
+            position: relative;
+        }
+        
+        .full-calendar .booking.user-booking::after {
+            content: "Duplo clique para excluir";
+            position: absolute;
+            bottom: 2px;
+            left: 2px;
+            font-size: 0.5rem;
+            color: var(--accent);
+        }
+        
+        .full-calendar .booking-period {
+            font-weight: 600;
+        }
+        
+        .full-calendar .booking-class {
+            font-style: italic;
+        }
+        
+        .full-calendar .booking-professor {
+            color: #555;
+        }
+        
+        .calendar-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .calendar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .calendar-nav-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .calendar-nav-btn:hover {
+            background-color: #2980b9;
         }
         
         @media (max-width: 1200px) {
@@ -569,6 +688,13 @@
             .calendar-day {
                 padding: 0.3rem;
             }
+            
+            .full-calendar th, 
+            .full-calendar td {
+                padding: 0.2rem;
+                font-size: 0.6rem;
+                height: 60px;
+            }
         }
         
         @media (max-width: 576px) {
@@ -587,6 +713,17 @@
             
             .space-image {
                 height: 160px;
+            }
+            
+            .full-calendar th, 
+            .full-calendar td {
+                padding: 0.1rem;
+                font-size: 0.5rem;
+                height: 50px;
+            }
+            
+            .booking {
+                font-size: 0.5rem;
             }
         }
     </style>
@@ -659,6 +796,34 @@
         </div>
     </div>
     
+    <!-- Calendário Completo -->
+    <div class="full-calendar-container">
+        <h2 style="text-align: center; color: var(--primary); margin-top: 2rem;">Calendário Completo de Agendamentos</h2>
+        
+        <div class="calendar-navigation">
+            <button class="calendar-nav-btn" onclick="changeMonth(-1)">Mês Anterior</button>
+            <h3 class="calendar-title" id="fullCalendarTitle">Maio 2025</h3>
+            <button class="calendar-nav-btn" onclick="changeMonth(1)">Próximo Mês</button>
+        </div>
+        
+        <table class="full-calendar" id="fullCalendar">
+            <thead>
+                <tr>
+                    <th>Domingo</th>
+                    <th>Segunda</th>
+                    <th>Terça</th>
+                    <th>Quarta</th>
+                    <th>Quinta</th>
+                    <th>Sexta</th>
+                    <th>Sábado</th>
+                </tr>
+            </thead>
+            <tbody id="fullCalendarBody">
+                <!-- O calendário será gerado via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    
     <!-- Modal de Agendamento -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
@@ -679,7 +844,7 @@
             
             <div class="form-group">
                 <label for="classGrade">Série/Turma</label>
-                <select id="classGrade">
+                <select id="classGrade" onchange="updatePeriodFromClass()">
                     <option value="">Selecione uma turma</option>
                     <optgroup label="Manhã">
                         <option value="6°A">6°A</option>
@@ -771,18 +936,177 @@
         let selectedDate = '';
         let selectedPeriod = 'manha';
         let selectedClass = '';
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let bookings = [];
+        let currentUserEmail = '';
         
-        // Abrir modal de agendamento
+        // Inicializar o sistema
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBookingsFromLocalStorage();
+            
+            if (bookings.length === 0) {
+                initializeSampleBookings();
+            }
+            
+            // Configurar eventos
+            setupEventListeners();
+            
+            // Carregar calendários
+            ['anfiteatro', 'laboratorio', 'informatica', 'leitura'].forEach(space => {
+                generateHistoryCalendar(space);
+            });
+            
+            generateFullCalendar();
+        });
+
+        // Funções principais
+        function initializeSampleBookings() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const nextWeek = new Date(today);
+            nextWeek.setDate(nextWeek.getDate() + 7);
+            
+            bookings = [
+                createBooking('anfiteatro', today, 'manha', '1', 'João Silva', 'joao.silva@prof.educacao.sp.gov.br', '8°A'),
+                createBooking('laboratorio', today, 'tarde', '3', 'Maria Oliveira', 'maria.oliveira@prof.educacao.sp.gov.br', '9°B'),
+                createBooking('informatica', tomorrow, 'manha', '2', 'Carlos Souza', 'carlos.souza@prof.educacao.sp.gov.br', '7°C'),
+                createBooking('leitura', nextWeek, 'noite', '4', 'Ana Santos', 'ana.santos@prof.educacao.sp.gov.br', '3°A')
+            ];
+        }
+        
+        function createBooking(space, date, period, classNumber, professorName, professorEmail, classGrade) {
+            return {
+                id: generateId(),
+                space: space,
+                date: formatDate(date),
+                period: period,
+                classNumber: classNumber,
+                professorName: professorName,
+                professorEmail: professorEmail,
+                classGrade: classGrade,
+                timestamp: new Date().toISOString()
+            };
+        }
+        
+        function setupEventListeners() {
+            // Eventos dos botões de período
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    changePeriod(this.dataset.period);
+                });
+            });
+            
+            // Fechar modal ao clicar fora dele
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('bookingModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+        
+        // Função para atualizar o período com base na turma selecionada
+        function updatePeriodFromClass() {
+            const classGrade = document.getElementById('classGrade').value;
+            if (!classGrade) return;
+            
+            // Determina o período com base na turma
+            const period = determinePeriodByClass(classGrade);
+            
+            // Atualiza a seleção visual do período
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.period-btn[data-period="${period}"]`).classList.add('active');
+            
+            // Atualiza o período selecionado
+            selectedPeriod = period;
+            
+            // Se já tiver data selecionada, carrega as aulas
+            if (selectedDate) {
+                loadClasses();
+            }
+        }
+        
+        // Funções auxiliares
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+        
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        function getMonthName(monthIndex) {
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
+                              "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            return monthNames[monthIndex];
+        }
+        
+        function formatPeriod(period) {
+            const periods = {
+                'manha': 'Manhã',
+                'tarde': 'Tarde',
+                'noite': 'Noite'
+            };
+            return periods[period] || period;
+        }
+        
+        function determinePeriodByClass(classGrade) {
+            // Turmas da MANHÃ (6° e 7° ano + 2° ano médio)
+            const morningClasses = ['6°A', '6°B', '6°C', '6°D', '7°A', '7°B', '2°A', '2°B', '2°C', '2°D', '2°E'];
+            
+            // Turmas da TARDE (6° a 9° ano + 1° ano médio)
+            const afternoonClasses = ['6°E', '6°F', '7°C', '7°D', '7°E', '7°F', '8°A', '8°B', '8°C', '9°A', '9°B', '1°A', '1°B', '1°C', '1°D', '1°E', '1°F', '1°G'];
+            
+            // Turmas da NOITE (2° e 3° ano médio)
+            const nightClasses = ['2°F', '2°G', '2°H', '2°I', '3°A', '3°B', '3°C', '3°D', '3°E', '3°F', '3°G'];
+            
+            if (morningClasses.includes(classGrade)) return 'manha';
+            if (afternoonClasses.includes(classGrade)) return 'tarde';
+            if (nightClasses.includes(classGrade)) return 'noite';
+            
+            return 'manha'; // padrão se não encontrar
+        }
+        
+        function canUserDeleteBooking(booking) {
+            return booking.professorEmail === currentUserEmail;
+        }
+        
+        // Funções de armazenamento
+        function saveBookingsToLocalStorage() {
+            localStorage.setItem('classroomBookings', JSON.stringify(bookings));
+            localStorage.setItem('currentUserEmail', currentUserEmail);
+        }
+        
+        function loadBookingsFromLocalStorage() {
+            const savedBookings = localStorage.getItem('classroomBookings');
+            const savedEmail = localStorage.getItem('currentUserEmail');
+            
+            if (savedBookings) {
+                bookings = JSON.parse(savedBookings);
+            }
+            
+            if (savedEmail) {
+                currentUserEmail = savedEmail;
+            }
+        }
+        
+        // Funções de agendamento
         function openModal(space) {
             currentSpace = space;
             const modal = document.getElementById('bookingModal');
             const title = document.getElementById('modalSpaceTitle');
             const header = document.getElementById('modalHeader');
             
-            // Resetar classes de cor do header
             header.className = 'modal-header';
             
-            // Definir título e cor do modal conforme o espaço
             if (space === 'anfiteatro') {
                 title.textContent = 'Agendar Anfiteatro';
                 header.classList.add('anfiteatro-header');
@@ -797,22 +1121,17 @@
                 header.classList.add('leitura-header');
             }
             
-            // Gerar calendário
             generateCalendar();
-            
-            // Mostrar modal
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
         
-        // Fechar modal
         function closeModal() {
             document.getElementById('bookingModal').style.display = 'none';
             document.body.style.overflow = 'auto';
             resetForm();
         }
         
-        // Resetar formulário
         function resetForm() {
             document.getElementById('professorName').value = '';
             document.getElementById('professorEmail').value = '';
@@ -820,7 +1139,6 @@
             selectedDate = '';
             selectedClass = '';
             
-            // Resetar seleções
             document.querySelectorAll('.calendar-day.selected').forEach(el => {
                 el.classList.remove('selected');
             });
@@ -829,74 +1147,54 @@
                 el.classList.remove('selected');
             });
             
-            // Resetar período para manhã
             document.querySelectorAll('.period-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             document.querySelector('.period-btn[data-period="manha"]').classList.add('active');
             selectedPeriod = 'manha';
             
-            // Limpar grid de aulas
             document.getElementById('classesGrid').innerHTML = '';
         }
         
-        // Gerar calendário com dias úteis (segunda a sexta)
         function generateCalendar() {
             const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
             const daysContainer = document.getElementById('calendarDays');
             
-            // Atualizar título do mês
-            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junio", 
-                              "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            document.getElementById('currentMonth').textContent = 
+                `${getMonthName(currentMonth)} ${currentYear}`;
             
-            // Limpar dias existentes
             daysContainer.innerHTML = '';
             
-            // Obter primeiro dia do mês
             const firstDay = new Date(currentYear, currentMonth, 1);
-            
-            // Obter último dia do mês
             const lastDay = new Date(currentYear, currentMonth + 1, 0);
-            
-            // Obter dia da semana do primeiro dia (0=Domingo, 1=Segunda, etc.)
             let firstDayOfWeek = firstDay.getDay();
             
-            // Ajustar para começar na segunda-feira (se primeiro dia for domingo, começa na coluna 6)
             if (firstDayOfWeek === 0) firstDayOfWeek = 6;
             else firstDayOfWeek -= 1;
             
-            // Adicionar dias vazios para alinhar o primeiro dia
             for (let i = 0; i < firstDayOfWeek; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.classList.add('calendar-day', 'disabled');
                 daysContainer.appendChild(emptyDay);
             }
             
-            // Adicionar dias do mês
             for (let day = 1; day <= lastDay.getDate(); day++) {
                 const date = new Date(currentYear, currentMonth, day);
                 const dayOfWeek = date.getDay();
                 
-                // Só mostrar dias úteis (segunda a sexta)
                 if (dayOfWeek >= 1 && dayOfWeek <= 5) {
                     const dayElement = document.createElement('div');
                     dayElement.classList.add('calendar-day');
                     dayElement.textContent = day;
                     
-                    // Formatar data como YYYY-MM-DD
-                    const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const formattedDate = formatDate(date);
                     dayElement.dataset.date = formattedDate;
                     
-                    // Verificar se é um dia passado
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
                     if (date < today) {
                         dayElement.classList.add('disabled');
                     } else {
-                        // Adicionar evento de clique
                         dayElement.addEventListener('click', function() {
                             selectDate(this);
                         });
@@ -907,25 +1205,20 @@
             }
         }
         
-        // Selecionar data
         function selectDate(element) {
-            // Desmarcar qualquer data selecionada anteriormente
             document.querySelectorAll('.calendar-day.selected').forEach(el => {
                 el.classList.remove('selected');
             });
             
-            // Marcar nova seleção
             element.classList.add('selected');
             selectedDate = element.dataset.date;
             
-            // Se já tiver turma selecionada, carregar aulas
             if (document.getElementById('classGrade').value) {
                 loadClasses();
             }
         }
         
-        // Carregar aulas conforme período selecionado
-        async function loadClasses() {
+        function loadClasses() {
             const classGrade = document.getElementById('classGrade').value;
             if (!classGrade || !selectedDate) return;
             
@@ -933,12 +1226,8 @@
             classesGrid.innerHTML = '';
             
             let classes = [];
-            
-            // Verificar se é ensino fundamental (6° ao 9° ano) ou médio (1° ao 3° ano)
             const isFundamental = /^[6-9]°/.test(classGrade);
-            const isMedio = /^[1-3]°/.test(classGrade);
             
-            // Definir aulas conforme período
             if (selectedPeriod === 'manha') {
                 classes = [
                     '1ª Aula (07:00-07:50)', 
@@ -968,40 +1257,27 @@
                 ];
             }
             
-            // Criar elementos das aulas
             for (let i = 0; i < classes.length; i++) {
                 const classTime = classes[i];
                 const classElement = document.createElement('div');
-                classElement.classList.add('class-slot');
                 
-                // Verificar se é um intervalo para estilização diferente
                 if (classTime.includes('Intervalo')) {
                     classElement.textContent = classTime;
-                    classElement.classList.add('interval-slot');
+                    classElement.classList.add('class-slot', 'interval-slot');
                 } else {
                     classElement.textContent = classTime;
+                    classElement.classList.add('class-slot');
                     classElement.dataset.class = i + 1;
                     
-                    // Verificar se já está reservado
-                    try {
-                        const isBooked = await checkIfBooked(selectedDate, selectedPeriod, i + 1, currentSpace);
-                        
-                        if (isBooked) {
-                            classElement.classList.add('booked');
-                            classElement.title = `Reservado por ${isBooked.professor} para ${isBooked.classGrade}`;
-                        } else {
-                            classElement.addEventListener('click', function() {
-                                selectClass(this);
-                            });
-                        }
-                    } catch (error) {
-                        console.error('Erro ao verificar reserva:', error);
-                        // Em caso de erro, permitir seleção mas mostrar aviso
+                    const isBooked = checkIfBooked(selectedDate, selectedPeriod, i + 1, currentSpace);
+                    
+                    if (isBooked) {
+                        classElement.classList.add('booked');
+                        classElement.title = `Reservado por ${isBooked.professorName} para ${isBooked.classGrade}`;
+                    } else {
                         classElement.addEventListener('click', function() {
                             selectClass(this);
                         });
-                        classElement.style.borderColor = 'orange';
-                        classElement.title = 'Não foi possível verificar disponibilidade';
                     }
                 }
                 
@@ -1009,101 +1285,56 @@
             }
         }
         
-        // Verificar se aula já está reservada
-        async function checkIfBooked(date, period, classNumber, space) {
-            try {
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbxh3EActKEDTWgA0YlKovOdYgL2EZ9P0DOnPoy6vF_DlDoVeG17N4xZMsFAv3rbCLH0/exec';
-                const response = await fetch(scriptUrl);
-                
-                if (!response.ok) {
-                    throw new Error('Erro ao verificar reservas');
-                }
-                
-                const bookings = await response.json();
-                
-                return bookings.find(booking => 
-                    booking.date === date && 
-                    booking.period === period && 
-                    booking.classNumber == classNumber && 
-                    booking.space === space
-                );
-                
-            } catch (error) {
-                console.error('Erro ao verificar reservas:', error);
-                throw error;
-            }
+        function checkIfBooked(date, period, classNumber, space) {
+            return bookings.find(booking => 
+                booking.date === date && 
+                booking.period === period && 
+                booking.classNumber == classNumber && 
+                booking.space === space
+            );
         }
         
-        // Selecionar aula
         function selectClass(element) {
-            // Desmarcar qualquer aula selecionada anteriormente
             document.querySelectorAll('.class-slot.selected').forEach(el => {
                 el.classList.remove('selected');
             });
             
-            // Marcar nova seleção
             element.classList.add('selected');
             selectedClass = element.dataset.class;
         }
         
-        // Mudar período (manhã, tarde, noite)
         function changePeriod(period) {
             selectedPeriod = period;
             
-            // Atualizar botões ativos
             document.querySelectorAll('.period-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             document.querySelector(`.period-btn[data-period="${period}"]`).classList.add('active');
             
-            // Se já tiver data e turma selecionadas, carregar aulas
             if (selectedDate && document.getElementById('classGrade').value) {
                 loadClasses();
             }
         }
         
-        // Determinar período com base na turma selecionada
-        function determinePeriodByClass(classGrade) {
-            // Turmas da manhã - Fundamental (6° ao 9°) e Médio (2° ano)
-            const morningClasses = ['6°A', '6°B', '6°C', '6°D', '7°A', '7°B', '7°C', '7°D', '2°A', '2°B', '2°C', '2°D', '2°E'];
-            
-            // Turmas da tarde - Fundamental (6° ao 9°) e Médio (1° ano)
-            const afternoonClasses = ['6°E', '6°F', '7°E', '7°F', '8°A', '8°B', '8°C', '9°A', '9°B', '1°A', '1°B', '1°C', '1°D', '1°E', '1°F', '1°G'];
-            
-            // Turmas da noite - Médio (2° e 3° ano)
-            const nightClasses = ['2°F', '2°G', '2°H', '2°I', '3°A', '3°B', '3°C', '3°D', '3°E', '3°F', '3°G'];
-            
-            if (morningClasses.includes(classGrade)) {
-                return 'manha';
-            } else if (afternoonClasses.includes(classGrade)) {
-                return 'tarde';
-            } else if (nightClasses.includes(classGrade)) {
-                return 'noite';
-            }
-            
-            return 'manha'; // padrão
-        }
-        
-        // Confirmar agendamento
-        async function confirmBooking() {
+        function confirmBooking() {
             const professorName = document.getElementById('professorName').value.trim();
             const professorEmail = document.getElementById('professorEmail').value.trim();
             const classGrade = document.getElementById('classGrade').value;
             
-            // Validar campos
             if (!professorName || !professorEmail || !classGrade || !selectedDate || !selectedClass) {
                 alert('Por favor, preencha todos os campos e selecione uma data e aula.');
                 return;
             }
             
-            // Validar e-mail institucional
             if (!professorEmail.endsWith('@prof.educacao.sp.gov.br')) {
                 alert('Por favor, utilize seu e-mail institucional (@prof.educacao.sp.gov.br)');
                 return;
             }
             
-            // Criar objeto com dados do agendamento
+            currentUserEmail = professorEmail;
+            
             const bookingData = {
+                id: generateId(),
                 space: currentSpace,
                 date: selectedDate,
                 period: selectedPeriod,
@@ -1115,32 +1346,36 @@
             };
             
             try {
-                // Mostrar loading
                 const confirmBtn = document.querySelector('.btn-confirm');
                 confirmBtn.disabled = true;
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
                 
-                // Enviar para o Google Sheets
-                const result = await sendToGoogleSheets(bookingData);
-                
-                if (!result.success) {
-                    throw new Error(result.message || 'Erro ao salvar agendamento');
-                }
-                
-                // Fechar modal e resetar formulário
-                closeModal();
-                
-                // Atualizar calendário de histórico
-                generateHistoryCalendar(currentSpace);
-                
-                // Mostrar mensagem de sucesso
-                alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
+                setTimeout(() => {
+                    const existingBooking = checkIfBooked(selectedDate, selectedPeriod, selectedClass, currentSpace);
+                    
+                    if (existingBooking) {
+                        alert('Este horário já está reservado!');
+                        confirmBtn.disabled = false;
+                        confirmBtn.innerHTML = 'Confirmar Agendamento';
+                        return;
+                    }
+                    
+                    bookings.push(bookingData);
+                    saveBookingsToLocalStorage();
+                    
+                    closeModal();
+                    generateHistoryCalendar(currentSpace);
+                    generateFullCalendar();
+                    
+                    alert('Agendamento realizado com sucesso!');
+                    confirmBtn.disabled = false;
+                    confirmBtn.innerHTML = 'Confirmar Agendamento';
+                }, 1000);
                 
             } catch (error) {
                 alert('Erro ao salvar agendamento: ' + error.message);
                 console.error(error);
                 
-                // Restaurar botão
                 const confirmBtn = document.querySelector('.btn-confirm');
                 if (confirmBtn) {
                     confirmBtn.disabled = false;
@@ -1149,230 +1384,238 @@
             }
         }
         
-        // Enviar dados para o Google Sheets
-        async function sendToGoogleSheets(bookingData) {
-            try {
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbyVjD3QVFxT5uRfXWplYsqpUu40KdItusOYG97phHFUSBSGl6HeWvXmKI7-b9U63Wlj/exec';
+        function deleteBooking(bookingId) {
+            const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+            
+            if (bookingIndex !== -1) {
+                const booking = bookings[bookingIndex];
                 
-                const response = await fetch(scriptUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(bookingData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Erro na resposta do servidor');
+                if (!canUserDeleteBooking(booking)) {
+                    alert('Apenas o professor que realizou este agendamento pode excluí-lo.');
+                    return false;
                 }
                 
-                const result = await response.json();
-                
-                if (!result.success) {
-                    throw new Error(result.message || 'Erro ao salvar agendamento');
+                if (confirm(`Tem certeza que deseja excluir o agendamento para ${booking.classGrade} na ${formatPeriod(booking.period)} - Aula ${booking.classNumber}?`)) {
+                    bookings.splice(bookingIndex, 1);
+                    saveBookingsToLocalStorage();
+                    
+                    generateFullCalendar();
+                    ['anfiteatro', 'laboratorio', 'informatica', 'leitura'].forEach(space => {
+                        generateHistoryCalendar(space);
+                    });
+                    
+                    alert('Agendamento excluído com sucesso!');
+                    return true;
                 }
-                
-                return result;
-                
-            } catch (error) {
-                console.error('Erro ao enviar para o Google Sheets:', error);
-                throw error;
             }
+            return false;
         }
         
-        // Gerar calendário de histórico para um espaço específico
-        async function generateHistoryCalendar(space) {
+        function generateHistoryCalendar(space) {
             const historyContainer = document.getElementById(`${space}-history`);
+            const spaceBookings = bookings.filter(booking => booking.space === space);
             
-            try {
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbxh3EActKEDTWgA0YlKovOdYgL2EZ9P0DOnPoy6vF_DlDoVeG17N4xZMsFAv3rbCLH0/exec';
-                const response = await fetch(scriptUrl);
-                
-                if (!response.ok) {
-                    throw new Error('Erro ao carregar histórico');
-                }
-                
-                const allBookings = await response.json();
-                
-                // Filtrar apenas os agendamentos para este espaço
-                const spaceBookings = allBookings.filter(booking => booking.space === space);
-                
-                if (spaceBookings.length === 0) {
-                    historyContainer.innerHTML = `
-                        <div class="history-title">Calendário de Agendamentos</div>
-                        <div class="no-history">Nenhum agendamento registrado ainda.</div>
-                    `;
-                    return;
-                }
-                
-                // Obter data atual
-                const now = new Date();
-                const currentMonth = now.getMonth();
-                const currentYear = now.getFullYear();
-                
-                // Obter primeiro dia do mês
-                const firstDay = new Date(currentYear, currentMonth, 1);
-                
-                // Obter último dia do mês
-                const lastDay = new Date(currentYear, currentMonth + 1, 0);
-                
-                // Obter dia da semana do primeiro dia (0=Domingo, 1=Segunda, etc.)
-                let firstDayOfWeek = firstDay.getDay();
-                
-                // Criar tabela do calendário
-                let calendarHTML = `
-                    <div class="history-title">Calendário de Agendamentos - ${getMonthName(currentMonth)} ${currentYear}</div>
-                    <table class="mini-calendar">
-                        <thead>
-                            <tr>
-                                <th>Dom</th>
-                                <th>Seg</th>
-                                <th>Ter</th>
-                                <th>Qua</th>
-                                <th>Qui</th>
-                                <th>Sex</th>
-                                <th>Sáb</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                `;
-                
-                // Adicionar células vazias para dias do mês anterior
-                for (let i = 0; i < firstDayOfWeek; i++) {
-                    calendarHTML += `<td class="other-month"></td>`;
-                }
-                
-                // Adicionar dias do mês
-                let dayCounter = 1;
-                let currentDayOfWeek = firstDayOfWeek;
-                
-                for (let day = 1; day <= lastDay.getDate(); day++) {
-                    const date = new Date(currentYear, currentMonth, day);
-                    const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    
-                    // Verificar se há agendamentos para este dia
-                    const dayBookings = spaceBookings.filter(booking => booking.date === formattedDate);
-                    
-                    // Determinar classes CSS
-                    let dayClasses = [];
-                    if (date.toDateString() === now.toDateString()) {
-                        dayClasses.push('today');
-                    }
-                    if (dayBookings.length > 0) {
-                        dayClasses.push('has-booking');
-                    }
-                    
-                    calendarHTML += `<td class="${dayClasses.join(' ')}" data-date="${formattedDate}">`;
-                    calendarHTML += `<span class="day-number">${day}</span>`;
-                    
-                    // Adicionar contador de agendamentos
-                    if (dayBookings.length > 0) {
-                        calendarHTML += `<span class="booking-count">${dayBookings.length}</span>`;
-                        
-                        // Criar tooltip com detalhes dos agendamentos
-                        calendarHTML += `<div class="booking-details">`;
-                        dayBookings.forEach(booking => {
-                            calendarHTML += `
-                                <div class="booking-item">
-                                    <div class="booking-period">${formatPeriod(booking.period)} - Aula ${booking.classNumber}</div>
-                                    <div class="booking-class">${booking.classGrade}</div>
-                                    <div class="booking-professor">Prof. ${booking.professorName}</div>
-                                </div>
-                            `;
-                        });
-                        calendarHTML += `</div>`;
-                    }
-                    
-                    calendarHTML += `</td>`;
-                    
-                    // Quebrar linha no final da semana
-                    currentDayOfWeek++;
-                    if (currentDayOfWeek > 6) {
-                        currentDayOfWeek = 0;
-                        if (day < lastDay.getDate()) {
-                            calendarHTML += `</tr><tr>`;
-                        }
-                    }
-                }
-                
-                // Adicionar células vazias para completar a última linha
-                while (currentDayOfWeek > 0 && currentDayOfWeek < 7) {
-                    calendarHTML += `<td class="other-month"></td>`;
-                    currentDayOfWeek++;
-                }
-                
-                calendarHTML += `
-                            </tr>
-                        </tbody>
-                    </table>
-                `;
-                
-                // Atualizar container
-                historyContainer.innerHTML = calendarHTML;
-                
-            } catch (error) {
-                console.error('Erro ao carregar histórico:', error);
-                
+            if (spaceBookings.length === 0) {
                 historyContainer.innerHTML = `
                     <div class="history-title">Calendário de Agendamentos</div>
-                    <div class="no-history">Erro ao carregar calendário. Tente recarregar a página.</div>
+                    <div class="no-history">Nenhum agendamento registrado ainda.</div>
                 `;
+                return;
+            }
+            
+            const now = new Date();
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            let firstDayOfWeek = firstDay.getDay();
+            
+            let calendarHTML = `
+                <div class="history-title">Calendário de Agendamentos - ${getMonthName(currentMonth)} ${currentYear}</div>
+                <table class="mini-calendar">
+                    <thead>
+                        <tr>
+                            <th>Dom</th>
+                            <th>Seg</th>
+                            <th>Ter</th>
+                            <th>Qua</th>
+                            <th>Qui</th>
+                            <th>Sex</th>
+                            <th>Sáb</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+            `;
+            
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                calendarHTML += `<td class="other-month"></td>`;
+            }
+            
+            let dayCounter = 1;
+            let currentDayOfWeek = firstDayOfWeek;
+            
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const formattedDate = formatDate(date);
+                
+                const dayBookings = spaceBookings.filter(booking => booking.date === formattedDate);
+                
+                let dayClasses = [];
+                if (date.toDateString() === now.toDateString()) {
+                    dayClasses.push('today');
+                }
+                if (dayBookings.length > 0) {
+                    dayClasses.push('has-booking');
+                }
+                if (selectedDate === formattedDate) {
+                    dayClasses.push('selected-date');
+                }
+                
+                calendarHTML += `<td class="${dayClasses.join(' ')}" data-date="${formattedDate}">`;
+                calendarHTML += `<span class="day-number">${day}</span>`;
+                
+                if (dayBookings.length > 0) {
+                    calendarHTML += `<span class="booking-count">${dayBookings.length}</span>`;
+                    calendarHTML += `<div class="booking-details">`;
+                    
+                    dayBookings.forEach(booking => {
+                        calendarHTML += `
+                            <div class="booking-item">
+                                <div class="booking-period">${formatPeriod(booking.period)} - Aula ${booking.classNumber}</div>
+                                <div class="booking-class">${booking.classGrade}</div>
+                                <div class="booking-professor">Prof. ${booking.professorName}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    calendarHTML += `</div>`;
+                }
+                
+                calendarHTML += `</td>`;
+                
+                currentDayOfWeek++;
+                if (currentDayOfWeek > 6) {
+                    currentDayOfWeek = 0;
+                    if (day < lastDay.getDate()) {
+                        calendarHTML += `</tr><tr>`;
+                    }
+                }
+            }
+            
+            while (currentDayOfWeek > 0 && currentDayOfWeek < 7) {
+                calendarHTML += `<td class="other-month"></td>`;
+                currentDayOfWeek++;
+            }
+            
+            calendarHTML += `
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            
+            historyContainer.innerHTML = calendarHTML;
+        }
+        
+        function generateFullCalendar() {
+            const calendarBody = document.getElementById('fullCalendarBody');
+            calendarBody.innerHTML = '';
+            
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            let firstDayOfWeek = firstDay.getDay();
+            
+            document.getElementById('fullCalendarTitle').textContent = 
+                `${getMonthName(currentMonth)} ${currentYear}`;
+            
+            const totalDays = lastDay.getDate();
+            const totalWeeks = Math.ceil((totalDays + firstDayOfWeek) / 7);
+            
+            let dayCounter = 1;
+            
+            for (let week = 0; week < totalWeeks; week++) {
+                const row = document.createElement('tr');
+                
+                for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+                    const cell = document.createElement('td');
+                    
+                    if ((week === 0 && dayOfWeek < firstDayOfWeek) || dayCounter > totalDays) {
+                        cell.classList.add('other-month');
+                    } else {
+                        const date = new Date(currentYear, currentMonth, dayCounter);
+                        const formattedDate = formatDate(date);
+                        
+                        if (date.toDateString() === new Date().toDateString()) {
+                            cell.classList.add('today');
+                        }
+                        
+                        if (selectedDate === formattedDate) {
+                            cell.classList.add('selected-date');
+                        }
+                        
+                        const dayNumber = document.createElement('div');
+                        dayNumber.className = 'day-number';
+                        dayNumber.textContent = dayCounter;
+                        cell.appendChild(dayNumber);
+                        
+                        const dayBookings = bookings.filter(booking => booking.date === formattedDate);
+                        
+                        dayBookings.forEach(booking => {
+                            const bookingElement = document.createElement('div');
+                            bookingElement.className = 'booking';
+                            bookingElement.dataset.bookingId = booking.id;
+                            
+                            if (canUserDeleteBooking(booking)) {
+                                bookingElement.classList.add('user-booking');
+                            }
+                            
+                            const periodElement = document.createElement('div');
+                            periodElement.className = 'booking-period';
+                            periodElement.textContent = `${formatPeriod(booking.period)} - Aula ${booking.classNumber}`;
+                            
+                            const classElement = document.createElement('div');
+                            classElement.className = 'booking-class';
+                            classElement.textContent = `${booking.classGrade} (${booking.space})`;
+                            
+                            const professorElement = document.createElement('div');
+                            professorElement.className = 'booking-professor';
+                            professorElement.textContent = `Prof. ${booking.professorName}`;
+                            
+                            bookingElement.appendChild(periodElement);
+                            bookingElement.appendChild(classElement);
+                            bookingElement.appendChild(professorElement);
+                            
+                            bookingElement.addEventListener('dblclick', function() {
+                                deleteBooking(booking.id);
+                            });
+                            
+                            cell.appendChild(bookingElement);
+                        });
+                        
+                        dayCounter++;
+                    }
+                    
+                    row.appendChild(cell);
+                }
+                
+                calendarBody.appendChild(row);
             }
         }
         
-        // Obter nome do mês
-        function getMonthName(monthIndex) {
-            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
-                              "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            return monthNames[monthIndex];
-        }
-        
-        // Formatar período para exibição
-        function formatPeriod(period) {
-            const periods = {
-                'manha': 'Manhã',
-                'tarde': 'Tarde',
-                'noite': 'Noite'
-            };
-            return periods[period] || period;
-        }
-        
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            // Eventos dos botões de período
-            document.querySelectorAll('.period-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    changePeriod(this.dataset.period);
-                });
-            });
+        function changeMonth(offset) {
+            currentMonth += offset;
             
-            // Evento de mudança na seleção de turma
-            document.getElementById('classGrade').addEventListener('change', function() {
-                if (this.value) {
-                    // Determinar período com base na turma selecionada
-                    const period = determinePeriodByClass(this.value);
-                    changePeriod(period);
-                    
-                    if (selectedDate) {
-                        loadClasses();
-                    }
-                }
-            });
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
             
-            // Carregar calendários de histórico para cada espaço
+            generateFullCalendar();
             ['anfiteatro', 'laboratorio', 'informatica', 'leitura'].forEach(space => {
                 generateHistoryCalendar(space);
             });
-        });
-        
-        // Fechar modal ao clicar fora dele
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('bookingModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
+        }
     </script>
 </body>
 </html>
