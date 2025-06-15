@@ -745,7 +745,7 @@
                 <!-- Calendário de Histórico -->
                 <div class="history-calendar" id="anfiteatro-history">
                     <div class="history-title">Calendário de Agendamentos</div>
-                    <div class="no-history">Carregando calendário...</div>
+                    <div class="no-history">Nenhum agendamento registrado ainda.</div>
                 </div>
             </div>
         </div>
@@ -760,7 +760,7 @@
                 <!-- Calendário de Histórico -->
                 <div class="history-calendar" id="laboratorio-history">
                     <div class="history-title">Calendário de Agendamentos</div>
-                    <div class="no-history">Carregando calendário...</div>
+                    <div class="no-history">Nenhum agendamento registrado ainda.</div>
                 </div>
             </div>
         </div>
@@ -775,7 +775,7 @@
                 <!-- Calendário de Histórico -->
                 <div class="history-calendar" id="informatica-history">
                     <div class="history-title">Calendário de Agendamentos</div>
-                    <div class="no-history">Carregando calendário...</div>
+                    <div class="no-history">Nenhum agendamento registrado ainda.</div>
                 </div>
             </div>
         </div>
@@ -790,7 +790,7 @@
                 <!-- Calendário de Histórico -->
                 <div class="history-calendar" id="leitura-history">
                     <div class="history-title">Calendário de Agendamentos</div>
-                    <div class="no-history">Carregando calendário...</div>
+                    <div class="no-history">Nenhum agendamento registrado ainda.</div>
                 </div>
             </div>
         </div>
@@ -952,16 +952,17 @@
         
         // Inicializar o sistema
         document.addEventListener('DOMContentLoaded', function() {
-            loadBookingsFromLocalStorage();
+            // Limpar qualquer agendamento existente
+            localStorage.removeItem('classroomBookings');
+            localStorage.removeItem('currentUserEmail');
             
-            if (bookings.length === 0) {
-                initializeSampleBookings();
-            }
+            // Carregar bookings vazios
+            loadBookingsFromLocalStorage();
             
             // Configurar eventos
             setupEventListeners();
             
-            // Carregar calendários
+            // Carregar calendários vazios
             ['anfiteatro', 'laboratorio', 'informatica', 'leitura'].forEach(space => {
                 generateHistoryCalendar(space);
             });
@@ -969,25 +970,6 @@
             generateFullCalendar();
         });
 
-        // Funções principais
-        function initializeSampleBookings() {
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            const nextWeek = new Date(today);
-            nextWeek.setDate(nextWeek.getDate() + 7);
-            
-            bookings = [
-                createBooking('anfiteatro', today, 'manha', '1', 'João Silva', 'joao.silva@prof.educacao.sp.gov.br', '8°A'),
-                createBooking('laboratorio', today, 'tarde', '3', 'Maria Oliveira', 'maria.oliveira@prof.educacao.sp.gov.br', '9°B'),
-                createBooking('informatica', tomorrow, 'manha', '2', 'Carlos Souza', 'carlos.souza@prof.educacao.sp.gov.br', '7°C'),
-                createBooking('leitura', nextWeek, 'noite', '4', 'Ana Santos', 'ana.santos@prof.educacao.sp.gov.br', '3°A'),
-                createBooking('anfiteatro', nextWeek, 'noite', '3', 'Pedro Alves', 'pedro.alves@prof.educacao.sp.gov.br', '1°H'),
-                createBooking('laboratorio', nextWeek, 'noite', '2', 'Fernanda Lima', 'fernanda.lima@prof.educacao.sp.gov.br', '1°I')
-            ];
-        }
-        
         function createBooking(space, date, period, classNumber, professorName, professorEmail, classGrade) {
             return {
                 id: generateId(),
@@ -1116,6 +1098,8 @@
             
             if (savedBookings) {
                 bookings = JSON.parse(savedBookings);
+            } else {
+                bookings = []; // Garante que não há agendamentos
             }
             
             if (savedEmail) {
